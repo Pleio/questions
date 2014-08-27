@@ -6,11 +6,8 @@
  */
 
 $page_owner = elgg_get_page_owner_entity();
-
 elgg_push_breadcrumb($page_owner->name);
-
 elgg_register_title_button();
-
 $title = elgg_echo('questions:owner', array($page_owner->name));
 
 $options = array(

@@ -76,7 +76,8 @@ function questions_init() {
 	elgg_register_action("object/question/save", "$actions_base/save.php");
 	elgg_register_action("object/question/move_to_discussions", "$actions_base/move_to_discussions.php");
 	elgg_register_action("questions/delete", "$actions_base/delete.php");
-	
+	elgg_register_action("object/question/workflow_open", "$actions_base/workflow_open.php");
+
 	// answer
 	$actions_base = dirname(__FILE__) . "/actions/object/answer";
 	elgg_register_action('object/answer/add', "$actions_base/save.php");

@@ -30,13 +30,24 @@ if ($marked_answer) {
   $count++;
 }
 
-$content .= elgg_view_module('info', "$count " . elgg_echo('questions:workflow:intanswers'), $intanswers, array("class" => "mtm"));
+// show all internal answers
+if ($count > 0) {
+  $content .= elgg_view_module('info', "$count " . elgg_echo('questions:workflow:intanswers'), $intanswers, array("class" => "mtm"));
+}
 
-// add answer form
+// add form to open internal question or answer form
 if ($question->canWriteToContainer(0, 'object', 'answer')) {
-  $add_form = elgg_view_form('object/intanswer/add', array(), array(
-      'container_guid' => $question->guid, 
-      'current_phase_guid' => $question->current_phase_guid
-  ));
-  $content .= elgg_view_module('info', elgg_echo('workflow:addyours'), $add_form);
+  if ($question->current_phase_guid) {
+    $add_form = elgg_view_form('object/intanswer/add', array(), array(
+        'container_guid' => $question->guid, 
+        'current_phase_guid' => $question->current_phase_guid
+    ));
+    $content .= elgg_view_module('info', elgg_echo('questions:workflow:addyours'), $add_form);
+  } else {
+    $open_workflow = elgg_view_form('object/question/workflow_open', array(), array(
+        'id'=>'workflow_add_intanswer',
+        'question_guid' => $question->guid
+    ));
+    $content .= elgg_view_module('info', elgg_echo('questions:workflow:open:title'), $open_workflow);
+  }
 }

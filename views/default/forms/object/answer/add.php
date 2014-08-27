@@ -3,4 +3,4 @@
 $vars['entity'] = new ElggAnswer();
 $vars['entity']->container_guid = $vars['container_guid'];
 
-echo elgg_view('forms/object/intanswer/edit', $vars);
+echo elgg_view('forms/object/answer/edit', $vars);

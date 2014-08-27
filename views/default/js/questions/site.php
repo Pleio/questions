@@ -9,6 +9,32 @@
 elgg.provide("elgg.questions");
 
 elgg.questions.init = function() {
+	var currentPhase = $("#answer_phase").val();
+	
+	$("#answer_phase").change(function() {
+		if ($(this).val() == $("#answer_phase option:last-child").val()) {
+			$("#answer_frontend").show();
+		} else {
+			$("#answer_frontend_check").attr('checked', false);
+			$("#answer_frontend").hide();
+		}
+	});
+
+	$(".elgg-form-object-intanswer-add").submit(function() {
+		if ($("#answer_phase").val() == currentPhase) {
+			if (!confirm(elgg.echo("questions:workflow:phase:nochange:confirm"))) {
+				return false;
+			}
+		}
+
+		if ($("#answer_frontend_check").attr('checked')) {
+			if (!confirm(elgg.echo("questions:workflow:answer:publish:frontend:confirm"))) {
+				return false;
+			}
+		}
+
+		return true;
+	});
 
 	$("form.questions-validate-container").submit(function() {
 		var result = true;

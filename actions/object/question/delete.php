@@ -13,8 +13,5 @@ if (!$question->canEdit()) {
 	forward(REFERER);
 }
 
-$owner = $question->getContainerEntity();
-
 $question->delete();
-
-forward(get_input('forward', "questions/owner/$owner->guid"));
+forward(get_input('forward', "questions/all"));

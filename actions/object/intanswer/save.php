@@ -4,6 +4,7 @@ elgg_make_sticky_form('intanswer');
 
 $guid = (int) get_input('guid');
 $phase_guid = (int) get_input('phase_guid');
+$answer_frontend = (int) get_input('answer_frontend');
 
 $intanswer = new ElggIntAnswer($guid);
 $adding = !$intanswer->guid;
@@ -47,8 +48,8 @@ if ($adding && isset($phase_guid)) {
   }
 
   // Save total answer time when the question is closed and remove current phase flag
-  $last_phase_guid =  key( array_slice( $phases, -1, 1, TRUE ) );
-  if (($phase_guid == $last_phase_guid) && isset($question->current_phase_guid)) {
+  $last_phase_guid = end(array_keys($phases));
+  if (isset($question->current_phase_guid) && ($phase_guid == $last_phase_guid)) {
     if (isset($question->total_answer_time)) {
       array_push($question->total_answer_time, $question->getWorkflowTotalTime());
     } else {
@@ -56,10 +57,10 @@ if ($adding && isset($phase_guid)) {
     }
 
     unset($question->current_phase_guid);
+  } else {
+    // Set phase of question to the changed GUID
+    $question->current_phase_guid = $phase_guid;
   }
-  
-  // Set phase of question to the changed GUID
-  $question->current_phase_guid = $phase_guid;
 }
 
 $intanswer->access_id = $question->access_id;
@@ -68,10 +69,20 @@ $intanswer->container_guid = $container_guid;
 try {
   $intanswer->save();
   $question->save();
-  
-  if ($adding) {
-    add_to_river("river/object/answer/create", "create", elgg_get_logged_in_user_guid(), $intanswer->guid, $intanswer->access_id);
+
+  // save answer to the frontend as well
+  if ($answer_frontend == 1) {
+    $answer = new ElggAnswer();
+    $answer->description = $description;
+    $answer->intanswer_guid = $intanswer->guid;
+    $answer->container_guid = $container_guid;
+    $answer->access_id = $question->access_id;
+    $answer->save();
+
+    $intanswer->answer_guid = $answer->guid;
+    $intanswer->save();
   }
+  
 } catch (Exception $e) {
   register_error(elgg_echo("questions:action:answer:save:error:save"));
   register_error($e->getMessage());

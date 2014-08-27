@@ -96,5 +96,19 @@ Klik hier om de vraag te beantwoorden:
   'questions:action:toggle_expert:success:make' => '%s is nu een vraag expert voor %s',
   'questions:action:toggle_expert:success:remove' => '%s is nu geen vraag expert meer voor %s',
   'questions:action:group_settings:success' => 'De instellingen zijn opgeslagen',
+
+  // Workflow system
+  'questions:workflow' => 'Workflow',
+  'questions:menu:workflow' => 'Workflow',
+  'questions:workflow:intanswers' => 'interne antwoorden',
+  'questions:workflow:addyours' => 'Antwoord toevoegen',
+  'questions:workflow:changephaseto' => 'En verander fase naar',
+  'questions:workflow:open:title' => 'Openen',
+  'questions:workflow:open:explanation' => 'Deze vraag is nog niet geopend in de workflow. Door op de knop te klikken kan de vraag in behandeling genomen worden.',
+  'questions:workflow:open' => 'Open vraag',
+  'questions:workflow:open:success' => 'Vraag is geopend in workflow',
+  'questions:workflow:answer:frontend' => 'Plaats antwoord ook op de voorkant',
+  'questions:workflow:answer:publish:frontend:confirm' => 'Weet u zeker dat u dit antwoord ook zichtbaar wil maken op de voorkant?',
+  'questions:workflow:phase:nochange:confirm' => 'Weet u zeker dat u de fase van de vraag niet wilt veranderen? Het proces wordt in dit geval niet doorgezet naar de volgende afdeling.'
 );
 add_translation("nl", $language);
