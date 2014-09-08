@@ -4,7 +4,7 @@
       "subtype" => QUESTIONS_WORKFLOW_PHASE,
       "limit" => false,
       "order_by_metadata" => array(array('name' => 'order', 'direction' => "asc", 'as' => "integer")),
-      "owner_guid" => elgg_get_site_entity()->getGUID(),
+      "owner_guid" => elgg_get_site_entity()->guid,
       "pagination" => false,
       "full_view" => false
     );

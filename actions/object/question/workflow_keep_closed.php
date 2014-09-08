@@ -13,10 +13,12 @@ if (!$question->canEdit()) {
   forward(REFERER);
 }
 
-if ($question->setWorkflowOpen()) {
-  system_message(elgg_echo("questions:workflow:open:success"));
+$question->workflowLastView = time();
+
+if ($question->save()) {
+  system_message(elgg_echo("questions:workflow:keep:closed:success"));
 } else {
-  system_message(elgg_echo("questions:workflow:open:error"));
+  system_message(elgg_echo("questions:workflow:keep:closed:error"));
 }
 
 $forward_url = $question->getWorkflowURL();

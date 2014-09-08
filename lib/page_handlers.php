@@ -17,13 +17,6 @@ function questions_page_handler($segments) {
 			include "$pages/all.php";
 			break;
 			
-		case "todo":
-			if (isset($segments[1]) && is_numeric($segments[1])) {
-				set_input("group_guid", $segments[1]);
-			}
-			include "$pages/todo.php";
-			break;
-
 		case "owner":
 			include "$pages/owner.php";
 			break;

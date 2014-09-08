@@ -6,6 +6,7 @@
  */
 ?>
 //<script>
+
 elgg.provide("elgg.questions");
 
 elgg.questions.init = function() {

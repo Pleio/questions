@@ -8,11 +8,14 @@ if($vars["entity"]){
   $guid = $vars["entity"]->guid;
   $name = $vars["entity"]->name;
   $due = $vars["entity"]->due;
+  $email = $vars["entity"]->email;
 } 
 
 $formbody .= elgg_echo('questions:workflow:phase:name') . ":" . elgg_view('input/text', array('name' => 'name', "value" => $name));
 $formbody .= "<br />";
 $formbody .= elgg_echo('questions:workflow:phase:due') . ":" . elgg_view('input/text', array('name' => 'due', "value" => $due));
+$formbody .= "<br />";
+$formbody .= elgg_echo('questions:workflow:phase:email') . ":" . elgg_view('input/text', array('name' => 'email', "value" => $email));
 $formbody .= "<br />";
 
 $formbody .= elgg_view('input/hidden', array('name' => 'guid', "value" => $guid));

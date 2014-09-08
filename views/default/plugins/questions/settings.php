@@ -62,6 +62,11 @@ $expert_settings .= elgg_echo("questions:settings:experts:mark");
 $expert_settings .= elgg_view("input/dropdown", array("name" => "params[experts_mark]", "value" => $plugin->experts_mark, "options_values" => $noyes_options, "class" => "mls"));
 $expert_settings .= "</div>";
 
+$expert_settings .= "<div>";
+$expert_settings .= elgg_echo("questions:settings:experts:notify");
+$expert_settings .= elgg_view("input/dropdown", array("name" => "params[experts_notify]", "value" => $plugin->experts_edit, "options_values" => $noyes_options, "class" => "mls"));
+$expert_settings .= "</div>";
+
 echo elgg_view_module("inline", elgg_echo("questions:settings:experts:title"), $expert_settings);
 
 // workflow settings

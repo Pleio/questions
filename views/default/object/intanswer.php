@@ -14,6 +14,14 @@ if (isset($intanswer->phase_guid)) {
   $subtitle .= " | " . get_entity($intanswer->phase_guid)->name;
 }
 
+if (isset($intanswer->email)) {
+  $subtitle .= " | " . elgg_echo("questions:workflow:email:notification:sent");
+}
+
+if (isset($intanswer->timeSpent)) {
+  $subtitle .= " | " . $intanswer->timeSpent . " " . elgg_echo("questions:workflow:hours");
+}
+
 // build entity menu
 $entity_menu = elgg_view_menu('entity', array(
   'entity' => $vars['entity'],

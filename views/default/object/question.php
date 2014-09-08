@@ -51,7 +51,7 @@ if ($num_answers != 0) {
 	$answer_options["limit"] = 1;
 	$answer_options["count"] = false;
 	
-	$correct_answer = $question->getMarkedAnswer();
+	$correct_answer = $question->getCorrectAnswer();
 
 	if ($correct_answer) {
 		$poster = $correct_answer->getOwnerEntity();
@@ -86,7 +86,7 @@ if (!elgg_in_context("widgets")) {
 }
 
 $solution_time = $question->solution_time;
-if ($solution_time && !$question->getMarkedAnswer()) {
+if ($solution_time && !$question->getCorrectAnswer()) {
 	$solution_class = "question-solution-time float-alt";
 	if ($solution_time < time()) {
 		$solution_class .= " question-solution-time-late";
@@ -140,7 +140,7 @@ if ($full) {
 } else {
 	// brief view
 	$title_text = "";
-	if ($question->getMarkedAnswer()) {
+	if ($question->getCorrectAnswer()) {
 		$title_text = elgg_view_icon("checkmark", "mrs question-listing-checkmark");
 	}
 	$title_text .= elgg_get_excerpt($question->title, 100);
@@ -162,18 +162,24 @@ if ($full) {
 	$params = array(
 		"entity" => $question,
 		"title" => $title,
-		"metadata" => $metadata,
 		"subtitle" => $subtitle,
 		"tags" => $tags,
 		"content" => $answer_text
 	);
 
 	if (get_input('workflow')) {
-		if (isset($question->current_phase_guid)) {
-			$params['title'] .= " | " . get_entity($question->current_phase_guid)->name;
+		if ($question->isWorkflowOpen()) {
+			$params['title'] .= " | " . $question->getCurrentWorkflowPhase()->name;
 		}
-		$params['title'] .= " | " . $question->getWorkflowTotalTime() . " uur";		
+		$params['title'] .= " | " . $question->getWorkflowLatestTotalTime() . " " . elgg_echo("questions:workflow:hours");		
+
+		if ($question->hasNewAnswers()) {
+			$params['title'] .= " | " . elgg_echo("questions:workflow:newanswers");
+		}
+
 	}
+
+
 
 	$list_body = elgg_view("object/elements/summary", $params);
 

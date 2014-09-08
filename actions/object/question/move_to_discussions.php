@@ -18,7 +18,6 @@ if (!empty($guid)) {
 		$container = $entity->getContainerEntity();
 		
 		if ($entity->canEdit() && questions_can_move_to_discussions($container)) {
-			$access_id = questions_validate_access_id($access_id, $container->getGUID());
 			
 			// save the latest changes
 			$entity->title = $title;

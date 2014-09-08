@@ -46,28 +46,45 @@ function questions_workflow_enabled() {
 /**
  * Return a list of active phases
  *
- * @return bool true is enabled, false otherwise
  */
-function questions_get_phases(ElggEntity $container = null) {
+function questions_get_phases($group_id = 0) {
+	static $phases;
+
+	if (!isset($phases)) {	
+		$phases = array();
+
+		if (!$group_id) {
+			$group_id = elgg_get_site_entity()->guid;
+		}
+
+	  $options = array(
+	      "type" => "object",
+	      "subtype" => QUESTIONS_WORKFLOW_PHASE,
+	      "limit" => false,
+	      "order_by_metadata" => array(array('name' => 'order', 'direction' => "asc", 'as' => "integer")),
+	      "container_guid" => $group_id,
+	      "pagination" => false,
+	      "full_view" => false
+	    );
+
+			$phases = elgg_get_entities_from_metadata($options);
+			
+			$result = array();
+			foreach ($phases as $phase) {
+				$result[$phase->guid] = $phase;
+			}
+			
+			return $result;
+	}
+}
+
+function questions_get_phases_array($group_id = 0) {
 	static $result;
 
 	if (!isset($result)) {	
-		$result = [];
-		if (!isset($container)) {
-			$container = elgg_get_site_entity();
-		}
+		$result = array();
+		$phases = questions_get_phases($group_id);
 
-  $options = array(
-      "type" => "object",
-      "subtype" => QUESTIONS_WORKFLOW_PHASE,
-      "limit" => false,
-      "order_by_metadata" => array(array('name' => 'order', 'direction' => "asc", 'as' => "integer")),
-      "owner_guid" => elgg_get_site_entity()->getGUID(),
-      "pagination" => false,
-      "full_view" => false
-    );
-
-		$phases = elgg_get_entities_from_metadata($options);
 		foreach($phases as $phase) {
 			$result[$phase->guid] = $phase->name;
 		}
@@ -202,66 +219,7 @@ function questions_can_mark_answer(ElggAnswer $entity, ElggUser $user = null) {
 }
 
 /**
- * Make sure the provided access_id is valid for this container
- *
- * @param int $access_id the current access_id
- * @param int $container_guid the container where the entity will be placed
- *
- * @return int the correct access_id for this container
- */
-function questions_validate_access_id($access_id, $container_guid) {
-	
-	if (!$access_id == ACCESS_DEFAULT) {
-		$access_id = get_default_access();
-	}
-	
-	if (!empty($container_guid)) {
-		$container = get_entity($container_guid);
-		
-		if (!empty($container)) {
-			if (elgg_instanceof($container, "user")) {
-				// is a default level defined in the plugin settings
-				$personal_access_id = questions_get_personal_access_level();
-				if ($personal_access_id !== false) {
-					$access_id = $personal_access_id;
-				} else {
-					// make sure access_id is not a group acl
-					$acl = get_access_collection($access_id);
-					
-					if (!empty($acl) && ($acl->owner_guid != $container->getGUID())) {
-						// this acl is a group acl, so set to something else
-						$access_id = ACCESS_LOGGED_IN;
-					}
-				}
-			} elseif (elgg_instanceof($container, "group")) {
-				// is a default level defined in the plugin settings
-				$group_access_id = questions_get_group_access_level($container);
-				if ($group_access_id !== false) {
-					$access_id = $group_access_id;
-				} else {
-					// friends access not allowed in groups
-					if ($access_id == ACCESS_FRIENDS) {
-						// so set it to group access
-						$access_id = $container->group_acl;
-					}
-					
-					// check if access is an acl
-					$acl = get_access_collection($access_id);
-					
-					if (!empty($acl) && ($acl->owner_guid != $container->getGUID())) {
-						// this acl is an acl, make sure it's the group acl
-						$access_id = $container->group_acl;
-					}
-				}
-			}
-		}
-	}
-	
-	return $access_id;
-}
-
-/**
- * Get the default defined peronal access setting.
+ * Get the default defined personal access setting.
  *
  * @return bool|int the access_id or false if up to the user
  */
@@ -339,35 +297,107 @@ function questions_close_on_marked_answer() {
  * 
  * @return int difference between timestamps (hours)
  */
-function questions_time_diff($timestamp1, $timestamp2, $working_days = array(1,2,3,4,5), $start_time = array(8,30), $end_time = array(17,0)) {
-	$dt1 = new DateTime(); $dt2 = new DateTime();
-	$dt1->setTimestamp($timestamp1); $dt2->setTimestamp($timestamp2);
+function questions_time_diff(int $beginTS, int $endTS, $workingDays = array(1,2,3,4,5), DateTime $workBeginTime, DateTime $workEndTime) {
+	$totalTime = 0;
 
-	// Calculate whole days diff
-	$beginTime = new DateTime("08:30");
-	$endTime = new DateTime("17:00");
+	if (!$workBeginTime) {
+		$workBeginTime = new DateTime("09:00");
+	}
+	if (!$workEndTime) {
+		$workEndTime = new DateTime("20:00");
+	}
 
-	// Calculate hours per day
-	$hoursPerDay = $endTime->diff($beginTime);
-	$hoursPerDay = ($hoursPerDay->format('%h') + $hoursPerDay->format('%i')/60);
+	$diff = $workBeginTime->diff($workEndTime);
+	$secondsPerDay = ($diff->h*3600) + ($diff->i*60) + ($diff->s);
 
-	// Calculate total days difference
-	$daysDifference = $dt2->diff($dt1);
-	return (($hoursPerDay * $daysDifference->format('%a')) + $daysDifference->format('%h'));
+	$begin = new DateTime();
+	$begin->setTimeStamp($beginTS);
+	$end = new DateTime();
+	$end->setTimeStamp($endTS);
+
+	if ($beginTS == 0 | $endTS == 0 | $beginTS >= $endTS) {
+		return 0;
+	}
+
+	// on the same day
+	if ($begin->format("Ymd") == $end->format("Ymd")) {
+		$beginTime = new DateTime($begin->format("H:i:s"));
+		$endTime = new DateTime($end->format("H:i:s"));
+
+		if ($beginTime < $workBeginTime) {
+			$lowerBound = $workBeginTime;
+		} else {
+			if ($beginTime > $workEndTime) {
+				$lowerBound = $workEndTime;
+			} else {
+				$lowerBound = $beginTime;
+			}
+		}
+
+		if ($endTime > $workEndTime) {
+			$upperBound = $workEndTime;
+		} else {
+			if ($endTime < $workBeginTime) {
+				$upperBound = $workBeginTime;
+			} else {
+				$upperBound = $endTime;
+			}
+		}
+
+		$diff = $lowerBound->diff($upperBound);
+		return (($diff->h*3600) + ($diff->i*60) + ($diff->s)) / 3600;
+	}
+
+	// not on the same day
+	if (in_array($begin->format('N'), $workingDays)) {
+		$beginTime = new DateTime($begin->format("H:i:s"));
+		if ($beginTime < $workBeginTime) {
+			$totalTime = $totalTime + $secondsPerDay;
+		} elseif ($beginTime > $workBeginTime && $beginTime < $workEndTime) {
+			$diff = $beginTime->diff($workEndTime);
+			$totalTime = $totalTime + ($diff->h*3600) + ($diff->i*60) + ($diff->s);			
+		}
+	}
+
+	if (in_array($end->format('N'), $workingDays)) {
+		$endTime = new DateTime($end->format("H:i:s"));
+		if ($endTime > $workBeginTime && $endTime < $workEndTime) {
+			$diff = $workBeginTime->diff($endTime);
+			$totalTime = $totalTime + ($diff->h*3600) + ($diff->i*60) + ($diff->s);			
+		} elseif ($endTime > $workEndTime) {
+			$totalTime = $totalTime + $secondsPerDay;
+		}
+	}
+
+	// set to beginning of the next day
+	$begin->modify('midnight +1 day');	
+
+	// set to last midnight
+	$end->modify('midnight');
+
+	$period = new DatePeriod($begin, new DateInterval('P1D'), $end);
+
+	foreach ($period as $day) {
+		if (in_array($day->format('N'), $workingDays)) {
+			$totalTime = $totalTime + $secondsPerDay;
+		}
+	}
+
+	return $totalTime / 3600;
 }
 
 /**
  * Notify the experts that a new question was asked
  *
  * @param ElggQuestion $entity the question to notify about
- * @param bool $moving is this qquestion being moved
+ * @param bool $moving is this question being moved
  *
  * @return void
  */
 function questions_notify_experts(ElggQuestion $entity, $moving = false) {
 	
 	// only if experts enabled
-	if (questions_experts_enabled()) {
+	if (questions_experts_enabled() && elgg_get_plugin_setting("experts_notify", "questions") == "yes") {
 		// validate input
 		if (!empty($entity) && elgg_instanceof($entity, "object", "question")) {
 			$experts = array();
@@ -534,4 +564,74 @@ function questions_backdate_annotation($annotation_id, $time_created) {
 	}
 	
 	return $result;
+}
+
+/**
+ * Retrieve the workflow access collection controlling access
+ * of the workflow entities.
+ * 
+ * @param int $group_id the group id of the workflow or 0 for site.
+ *
+ * @return int $ac_id the access id
+ */
+function questions_get_workflow_access_collection($group_id = 0) {
+	if (!$group_id) {
+		$entity = elgg_get_site_entity();
+	} else {
+		$entity = get_entity($group_id);
+		if ($entity instanceof ElggGroup && !$entity->getPrivateSetting('workflowACL')) {
+			$aclGuid = create_access_collection("Workflow " . $entity->name, $entity->guid);
+			$entity->setPrivateSetting('workflowACL', $aclGuid);
+		}
+	}
+
+	if ($acl = $entity->getPrivateSetting('workflowACL')) {
+		return $acl;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Retrieve the workflow access collection controlling access
+ * of the workflow entities.
+ * 
+ * @param int $group_id the group id of the workflow
+ *
+ * @return int $ac_id the access id
+ */
+function questions_get_site_email() {
+  $site = elgg_get_site_entity();
+  if(!empty($site->email)){
+    if(!empty($site->name)){
+      $site_from = $site->name . " <" . $site->email . ">";
+    } else {
+      $site_from = $site->email;
+    }
+  } else {
+    // no site email, so make one up
+    if(!empty($site->name)){
+      $site_from = $site->name . " <noreply@" . get_site_domain($site->getGUID()) . ">";
+    } else {
+      $site_from = "noreply@" . get_site_domain($site->getGUID());
+    }
+  }
+  return $site_from;	
+}
+
+/**
+ * Send a workflow notification for a question to the phase owner
+ * 
+ * @param ElggQuestion $question the question the notification is about
+ * @param QuesionsWorkflowPhase $phase the phase of the workflow
+ *
+ * @return bool
+ */
+function questions_send_workflow_notification(ElggQuestion $question, QuestionsWorkflowPhase $phase) {
+	return elgg_send_email(
+		questions_get_site_email(), 
+   	$phase->email, 
+		elgg_echo("questions:workflow:email:subject", array($question->title)),
+		elgg_echo("questions:workflow:email:body", array($question->getWorkflowURL()))
+	); 
 }

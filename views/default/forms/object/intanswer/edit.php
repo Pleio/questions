@@ -1,7 +1,7 @@
 <?php
 
 $intanswer = $vars['entity'];
-$phases = questions_get_phases();
+$phases = questions_get_phases_array();
 
 $description = array(
   'name' => 'description',

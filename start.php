@@ -34,6 +34,7 @@ function questions_init() {
 	// make question and answer searchable
 	elgg_register_entity_type("object", 'question');
 	elgg_register_entity_type("object", 'answer');
+	elgg_register_entity_type("object", 'intanswer');
 	
 	// register widget
 	elgg_register_widget_type('questions', elgg_echo("widget:questions:title"), elgg_echo("widget:questions:description"), "index,profile,dashboard,groups", true);
@@ -77,6 +78,7 @@ function questions_init() {
 	elgg_register_action("object/question/move_to_discussions", "$actions_base/move_to_discussions.php");
 	elgg_register_action("questions/delete", "$actions_base/delete.php");
 	elgg_register_action("object/question/workflow_open", "$actions_base/workflow_open.php");
+	elgg_register_action("object/question/workflow_keep_closed", "$actions_base/workflow_keep_closed.php");
 
 	// answer
 	$actions_base = dirname(__FILE__) . "/actions/object/answer";
@@ -91,4 +93,16 @@ function questions_init() {
 	elgg_register_action('object/intanswer/edit', "$actions_base/save.php");
 	elgg_register_action('intanswers/delete', "$actions_base/delete.php");
 	
+	elgg_register_plugin_hook_handler('unit_test', 'system', 'questions_test');
 }
+
+/**
+ * Runs unit tests for questions
+ *
+ * @return array
+ */
+function questions_test($hook, $type, $value, $params) {
+    $value[] = dirname(__FILE__) . '/tests/questions.php';
+    return $value;
+}
+

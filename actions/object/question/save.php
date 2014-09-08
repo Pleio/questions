@@ -44,9 +44,6 @@ if (empty($container_guid) || empty($title) || empty($description)) {
 	forward(REFERER);
 }
 
-// make sure we have a valid access_id
-$access_id = questions_validate_access_id($access_id, $container_guid);
-
 $question->title = $title;
 $question->description = $description;
 $question->tags = $tags;

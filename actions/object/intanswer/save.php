@@ -1,12 +1,14 @@
 <?php
-
 elgg_make_sticky_form('intanswer');
 
 $guid = (int) get_input('guid');
 $phase_guid = (int) get_input('phase_guid');
 $answer_frontend = (int) get_input('answer_frontend');
+$container_guid = (int) get_input('container_guid');
+$description = get_input('description');
 
 $intanswer = new ElggIntAnswer($guid);
+
 $adding = !$intanswer->guid;
 $editing = !$adding;
 
@@ -14,9 +16,6 @@ if ($editing && !$intanswer->canEdit()) {
   register_error(elgg_echo("InvalidParameterException:NoEntityFound"));
   forward(REFERER);
 }
-
-$container_guid = (int) get_input('container_guid');
-$description = get_input('description');
 
 if (empty($container_guid) || empty($description)) {
   register_error(elgg_echo("questions:action:answer:save:error:body", array($container_guid, $description)));
@@ -35,35 +34,27 @@ if (empty($question) || !elgg_instanceof($question, "object", "question")){
   forward(REFERER);
 }
 
+if ($question->container_guid instanceof ElggGroup) {
+  $access_collection_guid = questions_get_workflow_access_collection($question->container_guid);  
+  $group_guid = $question->container_guid;
+} else {
+  $group_guid = 0;
+  $access_collection_guid = questions_get_workflow_access_collection();
+}
+
+if (!$access_collection_guid) {
+  register_error(elgg_echo("questions:workflow:noacl"));
+  forward(REFERER);
+}
+
+$intanswer->access_id = $access_collection_guid;
 $intanswer->description = $description;
 
 if ($adding && isset($phase_guid)) {
-  $phases = questions_get_phases($container_guid);
-
-  // Place intanswer at first phase if no current phase is selected
-  if (!isset($question->current_phase_guid)) {
-    $intanswer->phase_guid = key($phases);
-  } else {
-    $intanswer->phase_guid = $question->current_phase_guid;
-  }
-
-  // Save total answer time when the question is closed and remove current phase flag
-  $last_phase_guid = end(array_keys($phases));
-  if (isset($question->current_phase_guid) && ($phase_guid == $last_phase_guid)) {
-    if (isset($question->total_answer_time)) {
-      array_push($question->total_answer_time, $question->getWorkflowTotalTime());
-    } else {
-      $question->total_answer_time = array($question->getWorkflowTotalTime());
-    }
-
-    unset($question->current_phase_guid);
-  } else {
-    // Set phase of question to the changed GUID
-    $question->current_phase_guid = $phase_guid;
-  }
+  $intanswer->phase_guid = $question->getCurrentWorkflowPhase()->guid;
+  $question->changeWorkflowPhase($phase_guid);
 }
 
-$intanswer->access_id = $question->access_id;
 $intanswer->container_guid = $container_guid;
 
 try {

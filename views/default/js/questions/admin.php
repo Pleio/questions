@@ -1,4 +1,5 @@
 //<script>
+
 $(document).ready(function(){
   $('#questions-workflow-phases-ordering').sortable({
       update: function(event, ui) { 
@@ -30,4 +31,3 @@ function questions_workflow_phase_remove(guid) {
     });
   }
 }
-//</script>

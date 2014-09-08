@@ -9,9 +9,9 @@ $content = elgg_view_entity($question, array('full_view' => true));
 $answers = "";
 
 // add the answer marked as the correct answer first
-$marked_answer = $question->getMarkedAnswer();
-if ($marked_answer) {
-  $answers .= elgg_view_entity($marked_answer);
+$correctAnswer = $question->getCorrectAnswer();
+if ($correctAnswer) {
+  $answers .= elgg_view_entity($correctAnswer);
 }
 
 // add the rest of the answers
@@ -23,9 +23,9 @@ $options = array(
   'limit' => false
 );
 
-if ($marked_answer) {
+if ($correctAnswer) {
   // do not include the marked answer as it already  added to the output before
-  $options["wheres"] = array("e.guid <> " . $marked_answer->getGUID());
+  $options["wheres"] = array("e.guid <> " . $correctAnswer->getGUID());
 }
 
 if (elgg_is_active_plugin("likes")) {

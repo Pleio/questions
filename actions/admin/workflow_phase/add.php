@@ -1,9 +1,11 @@
 <?php  
 
 $site_guid = elgg_get_site_entity()->getGUID();
+
 $guid = get_input("guid");
 $name = get_input("name");
 $due = get_input("due");
+$email = get_input("email");
 
 if(!empty($guid)){
   $entity = get_entity($guid);
@@ -14,6 +16,7 @@ if(!empty($guid)){
   $entity = new QuestionsWorkflowPhase();
   $entity->owner_guid = $site_guid;
   $entity->container_guid = $site_guid;
+  $entity->access_id = get_default_access();  
   $entity->save();
   $add = true;
 } 
@@ -21,6 +24,7 @@ if(!empty($guid)){
 if(!is_null($entity)){
   $entity->name = $name;
   $entity->due = $due;
+  $entity->email = $email;
 
   // add correct order
   if($add){

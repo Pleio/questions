@@ -41,7 +41,7 @@ function questions_entity_menu_handler($hook, $type, $items, $params) {
 
 			if (elgg_instanceof($entity, "object", "answer") && questions_can_mark_answer($entity)) {
 				$question = $entity->getContainerEntity();
-				$answer = $question->getMarkedAnswer();
+				$answer = $question->getCorrectAnswer();
 
 				if (empty($answer)) {
 					$items[] = ElggMenuItem::factory(array(
@@ -106,28 +106,12 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 		}
 
 		if (questions_is_expert()) {
-			$items[] = ElggMenuItem::factory(array(
-				"name" => "todo",
-				"text" => elgg_echo("questions:menu:filter:todo"),
-				"href" => "questions/todo",
-				"priority" => 700
-			));
-
 			if (questions_workflow_enabled()) {
 				$items[] = ElggMenuItem::factory(array(
 					"name" => "workflow",
 					"text" => elgg_echo("questions:menu:workflow"),
 					"href" => "questions/workflow",
 					"priority" => 705
-				));
-			}
-
-			if (elgg_instanceof($page_owner, "group")) {
-				$items[] = ElggMenuItem::factory(array(
-					"name" => "todo_group",
-					"text" => elgg_echo("questions:menu:filter:todo_group"),
-					"href" => "questions/todo/" . $page_owner->getGUID(),
-					"priority" => 710
 				));
 			}
 		}
@@ -233,55 +217,31 @@ function questions_container_permissions_handler($hook, $type, $returnvalue, $pa
 function questions_permissions_handler($hook, $type, $returnvalue, $params) {
 	$result = $returnvalue;
 
+	$entity = elgg_extract("entity", $params);
+	$user = elgg_extract("user", $params);
+
 	if (!empty($params) && is_array($params)) {
-		// get the provided data
-		$entity = elgg_extract("entity", $params);
-		$user = elgg_extract("user", $params);
+		if (elgg_instanceof($entity, "object", "answer") | elgg_instanceof($entity, "object", "intanswer")) {
+			$entity = elgg_extract("entity", $params);
+			$user = elgg_extract("user", $params);
 
-		// expert only changes
-		if (questions_experts_enabled()) {
-			// check if an expert can edit a question
-			if (!$result && !empty($user) && elgg_instanceof($user, "user") && !empty($entity) && elgg_instanceof($entity, "object", "question")) {
-				$container = $entity->getContainerEntity();
-				if (!elgg_instanceof($container, "group")) {
-					$container = elgg_get_site_entity();
-				}
-
-				if (questions_is_expert($container, $user)) {
-					$result = true;
-				}
-			}
-
-			// an expert should be able to edit an answer, so fix this
-			if ($result && !empty($user) && elgg_instanceof($user, "user") && !empty($entity) && elgg_instanceof($entity, "object", "answer")) {
-				// user is not the owner
-				if ($entity->getOwnerGUID() != $user->getGUID()) {
-					$question = $entity->getContainerEntity();
-
-					if (!empty($question) && elgg_instanceof($question, "object", "question")) {
-						$container = $question->getContainerEntity();
-						if (!elgg_instanceof($container, "group")) {
-							$container = elgg_get_site_entity();
-						}
-
-						// if the user is an expert
-						if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $container->getGUID())) {
-							$result = false;
-						}
-					}
-				}
-			}
-		}
-
-		// questions can't be editted by owner if it is closed
-		if ($result && !empty($user) && elgg_instanceof($user, "user") && !empty($entity) && elgg_instanceof($entity, "object", "question")) {
-			// is the question closed
-			if ($entity->getStatus() == "closed") {
-				// are you the owner
-				if ($user->getGUID() == $entity->getOwnerGUID()) {
+			// reset rights inherited from container
+			if ($entity->getOwnerGUID() != $user->getGUID()) {
+				$result = false;
+			}			
+		} elseif (elgg_instanceof($entity, "object", "question")) {
+			// disable access to owner for closed questions
+			if (elgg_instanceof($entity, "object", "question")) {
+				if ($entity->getStatus() == "closed" && $user->getGUID()==$entity->getOwnerGUID()) {
 					$result = false;
 				}
 			}
+
+			// enable access for expert
+			$container = $entity->getContainerEntity();
+			if (questions_experts_enabled() && questions_is_expert($container, $user)) {
+				$result = true;
+			}			
 		}
 	}
 

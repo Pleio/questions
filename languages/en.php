@@ -20,9 +20,6 @@ add_translation('en', array(
 	'questions:menu:entity:answer:mark' => "This is correct",
 	'questions:menu:entity:answer:unmark' => "No longer correct",
 
-	'questions:menu:filter:updated' => "Recently updated",
-	'questions:menu:filter:todo' => "Todo",
-	'questions:menu:filter:todo_group' => "Group Todo",
 	'questions:menu:filter:experts' => "Experts",
 	
 	'river:create:object:question' => '%s asked question %s',
@@ -101,6 +98,8 @@ To answer the question go here:
 	'questions:settings:experts:enable:description' => "Experts have special privilages and can be assigned by site administrators and group owners.",
 	'questions:settings:experts:answer' => "Only experts can answer a question",
 	'questions:settings:experts:mark' => "Only experts can mark an answer as the correct answer",
+	'questions:settings:experts:edit' => "Experts can edit all questions",
+	'questions:settings:experts:notify' => "Send experts a notification when a new question is placed",
 	
 	'questions:settings:access:title' => "Access settings",
 	'questions:settings:access:personal' => "What will be the access level for personal questions",
@@ -149,4 +148,33 @@ To answer the question go here:
 	'questions:action:toggle_expert:success:remove' => "%s is no longer a questions expert for %s",
 	
 	'questions:action:group_settings:success' => "The group settings were saved",
+  
+  // Workflow system
+  'questions:workflow' => 'Workflow',
+  'questions:menu:workflow' => 'Workflow',
+  'questions:workflow:hours' => 'hours',
+  'questions:workflow:intanswers' => 'internal answers',
+  'questions:workflow:addyours' => 'Add answer',
+  'questions:workflow:changephaseto' => 'And change phase to',
+  'questions:workflow:open:title' => 'Open',
+  'questions:workflow:open:explanation' => 'This question is not yet opened in the workflow system. Click the button to open the question.',
+  'questions:workflow:open' => 'Open question',
+  'questions:workflow:open:success' => 'Question opened in workflow',
+  'questions:workflow:answer:frontend' => 'Publish answer on the frontend',
+  'questions:workflow:answer:publish:frontend:confirm' => 'Are you sure you want to publish the answer to the frontend?',
+  'questions:workflow:phase:nochange:confirm' => 'Do you really not want to change the phase? In this case the question will not be forwarded to the next department.',
+  'questions:workflow:email:subject' => 'New workflow question: %s',
+  'questions:workflow:email:body' => 'A new message is added to the workflow. Please answer this question by visiting: %s',
+  'questions:workflow:email:notification:sent' => 'Notification sent',    
+  'questions:workflow:keep:closed' => 'Keep closed',
+  'questions:settings:workflow:title' => 'Workflow system',
+  'questions:settings:workflow:enable' => 'Activate',
+  'questions:settings:workflow:enable:description' => 'With the workflow system questions can be answered systematically.',
+  'questions:settings:workflow:phases' => 'Phases',
+  'questions:workflow:newanswers' => 'New messages',
+  'questions:workflow:phase:edit' => 'Change phase',
+  'questions:workflow:phase:name' => 'Name',
+  'questions:workflow:phase:due' => 'Due time',
+  'questions:workflow:phase:email' => 'E-mail notification',
+  'questions:settings:predefined_tags:title' => 'Predefined tags'  
 ));
