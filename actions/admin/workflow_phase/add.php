@@ -1,4 +1,10 @@
 <?php  
+/**
+ * Add workflow phase
+ *
+ * @package Questions
+ *
+ */
 
 $site_guid = elgg_get_site_entity()->getGUID();
 

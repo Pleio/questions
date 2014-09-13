@@ -1,4 +1,10 @@
 <?php
+/**
+ * Move question to discussion
+ *
+ * @package Questions
+ *
+ */
 
 elgg_make_sticky_form("question");
 

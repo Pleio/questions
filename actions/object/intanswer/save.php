@@ -1,4 +1,11 @@
 <?php
+/**
+ * Save internal (workflow) answer
+ *
+ * @package Questions
+ *
+ */
+
 elgg_make_sticky_form('intanswer');
 
 $guid = (int) get_input('guid');
@@ -18,7 +25,7 @@ if ($editing && !$intanswer->canEdit()) {
 }
 
 if (empty($container_guid) || empty($description)) {
-  register_error(elgg_echo("questions:action:answer:save:error:body", array($container_guid, $description)));
+  register_error(elgg_echo("questions:action:answer:save:error:body"));
   forward(REFERER);
 }
 
@@ -58,22 +65,13 @@ if ($adding && isset($phase_guid)) {
 $intanswer->container_guid = $container_guid;
 
 try {
+  if ($answer_frontend == 1) {
+    $intanswer->answerGuid = true;
+  }
+
   $intanswer->save();
   $question->save();
 
-  // save answer to the frontend as well
-  if ($answer_frontend == 1) {
-    $answer = new ElggAnswer();
-    $answer->description = $description;
-    $answer->intanswer_guid = $intanswer->guid;
-    $answer->container_guid = $container_guid;
-    $answer->access_id = $question->access_id;
-    $answer->save();
-
-    $intanswer->answer_guid = $answer->guid;
-    $intanswer->save();
-  }
-  
 } catch (Exception $e) {
   register_error(elgg_echo("questions:action:answer:save:error:save"));
   register_error($e->getMessage());

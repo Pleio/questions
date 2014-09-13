@@ -1,4 +1,11 @@
 <?php 
+/**
+ * Reorder workflow phases
+ *
+ * @package Questions
+ *
+ */
+
 $ordering = get_input("elgg-object");
 
 if(!empty($ordering) && is_array($ordering)){

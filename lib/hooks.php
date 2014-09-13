@@ -1,4 +1,10 @@
 <?php
+/**
+ * Hooks
+ *
+ * @package Questions
+ *
+ */
 
 function questions_owner_block_menu_handler($hook, $type, $items, $params) {
 	$entity = $params['entity'];
@@ -95,28 +101,56 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 
 				// highlight all
 				if ($item->getName() == "all") {
-					$current_page = current_page_url();
+					$item->setHref("questions/group/" . $page_owner->getGUID() . "/all");
 
+					$current_page = current_page_url();
 					if (stristr($current_page, "questions/group/" . $page_owner->getGUID() . "/all")) {
-						$item->setHref("questions/group/" . $page_owner->getGUID() . "/all");
-						//$item->setSelected(true);
+						$item->setSelected(true);
 					}
 				}
 			}
 		}
 
-		if (questions_is_expert()) {
-			if (questions_workflow_enabled()) {
+		if (elgg_instanceof($page_owner, "group")) {
+			$expertContainer = $page_owner;
+		} else {
+			$expertContainer = null;
+		}
+		
+		if (questions_is_expert($expertContainer) && !questions_workflow_enabled($expertContainer)) {
+			if (elgg_instanceof($page_owner, "group")) {
 				$items[] = ElggMenuItem::factory(array(
-					"name" => "workflow",
-					"text" => elgg_echo("questions:menu:workflow"),
-					"href" => "questions/workflow",
-					"priority" => 705
+					"name" => "todo_group",
+					"text" => elgg_echo("questions:menu:filter:todo_group"),
+					"href" => "questions/todo/" . $page_owner->getGUID(),
+					"priority" => 710
+				));
+			} else {
+				$items[] = ElggMenuItem::factory(array(
+					"name" => "todo",
+					"text" => elgg_echo("questions:menu:filter:todo"),
+					"href" => "questions/todo",
+					"priority" => 700
 				));
 			}
 		}
 
-		if (questions_experts_enabled()) {
+		if (questions_is_expert($expertContainer) && questions_workflow_enabled($expertContainer)) {
+			if (elgg_instanceof($page_owner, "group")) {
+				$url = "questions/group/" . $page_owner->getGUID() . "/workflow";
+			} else {
+				$url = "questions/workflow";
+			}
+
+			$items[] = ElggMenuItem::factory(array(
+				"name" => "workflow",
+				"text" => elgg_echo("questions:menu:workflow"),
+				"href" => $url,
+				"priority" => 705
+			));
+		}
+
+		if ((elgg_is_admin_logged_in() | questions_is_expert($expertContainer)) && questions_experts_enabled()) {
 			$experts_href = "questions/experts";
 			if (elgg_instanceof($page_owner, "group")) {
 				$experts_href .= "/" . elgg_get_page_owner_guid();

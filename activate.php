@@ -26,3 +26,20 @@ if (!$site->getPrivateSetting('workflowACL')) {
   $aclGuid = create_access_collection("Workflow " . $site->name, $site->guid);
   $site->setPrivateSetting('workflowACL', $aclGuid);
 }
+
+// Migrate old "correct marks" to new marks with entity relations
+$options = array(
+  'subtypes' => ANSWER_OBJECT,
+  'metadata_names' => array('correct_answer'), 
+  'limit' => 0
+);
+
+$answers = elgg_get_entities_from_metadata($options);
+foreach ($answers as $answer) {
+  $question = $answer->getContainerEntity();
+
+  unset($answer->correct_answer);
+  $answer->save();
+
+  add_entity_relationship($question->guid, "correctAnswer", $answer->guid);
+}

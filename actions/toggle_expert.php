@@ -1,6 +1,9 @@
 <?php
 /**
- * This action toggles the expert role for a user on or off
+ * Toggle expert role of a user
+ * 
+ * @package Questions
+ *
  */
 
 $user_guid = (int) get_input("user_guid");
@@ -11,7 +14,6 @@ if (!$access_collection_guid) {
 	register_error(elgg_echo("questions:workflow:noacl"));
 	forward(REFERER);
 }
-
 
 if (!empty($user_guid) && !empty($page_owner_guid)) {
 	$user = get_user($user_guid);

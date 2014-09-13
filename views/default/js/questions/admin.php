@@ -1,5 +1,11 @@
+<?php
+/**
+ * Javascript admin file for this plugin. This is added to the global site JS.
+ *
+ * @package ElggQuestions
+ */
+?>
 //<script>
-
 $(document).ready(function(){
   $('#questions-workflow-phases-ordering').sortable({
       update: function(event, ui) { 

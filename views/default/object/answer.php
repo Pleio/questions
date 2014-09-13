@@ -1,4 +1,10 @@
 <?php
+/**
+ * Workflow answer object view
+ *
+ * @package ElggQuestions
+ */
+
 $answer = $vars['entity'];
 
 $image = elgg_view_entity_icon(get_entity($answer->owner_guid), 'small');

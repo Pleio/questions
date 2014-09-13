@@ -1,6 +1,6 @@
 <?php
 /**
- * View a question
+ * View a question page
  *
  * @package ElggQuestions
  */
@@ -21,18 +21,21 @@ $page_owner = $question->getContainerEntity();
 // set breadcrumb
 $crumbs_title = $page_owner->name;
 
-if (get_input('workflow') == true) {
-  elgg_push_breadcrumb(elgg_echo("questions:workflow"), "questions/workflow");
-}
-
 if (elgg_instanceof($page_owner, 'group')) {
-	elgg_push_breadcrumb($crumbs_title, "questions/group/$page_owner->guid");
+  $base_url = "questions/group/$page_owner->guid";
+  elgg_push_breadcrumb($crumbs_title, $base_url);
+} else {
+  $base_url = "questions";
 }
 
-if (get_input('workflow') == true) {
-  include("view_workflow.php");
+if ($workflow == true) {
+  elgg_push_breadcrumb(elgg_echo("questions:workflow"), $base_url . "/workflow");
+}
+
+if ($workflow == true) {
+  include("view/workflow.php");
 } else {
-  include("view_answers.php");
+  include("view/answers.php");
 }
 
 $body = elgg_view_layout('content', array(

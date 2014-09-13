@@ -1,4 +1,10 @@
 <?php
+/**
+ * Internal (workflow) answer object
+ *
+ * @package Questions
+ *
+ */
 
 class ElggIntAnswer extends ElggObject {
   const SUBTYPE = 'intanswer';
@@ -21,6 +27,23 @@ class ElggIntAnswer extends ElggObject {
    */ 
   public function getQuestion() {
     return $this->getContainerEntity();
+  }
+
+  /**
+   * Return the phase of the answer
+   *
+   * @return QeustionsWorkflowPhase| workflow phase
+   */ 
+  public function getPhase() {
+    access_show_hidden_entities(true);
+
+    if ($this->phase_guid) {
+      $phase = get_entity($this->phase_guid);
+    }
+
+    access_show_hidden_entities(false);
+
+    return $phase;
   }
 
   /**
@@ -58,11 +81,46 @@ class ElggIntAnswer extends ElggObject {
     return questions_time_diff($startTime, time());
   }
 
+  /**
+   * Publish post also on frontend
+   *
+   * @return bool
+   */
+  public function publishOnFrontend() {
+    if (is_bool($this->answerGuid)) {
+      $answer = new ElggAnswer();
+      $answer->description = $this->description;
+      $answer->intanswerGuid = $this->guid;
+      $answer->container_guid = $this->container_guid;
+      $answer->access_id = $this->getQuestion()->access_id;
+      $answer->save();
+
+      $this->answerGuid = $answer->guid;
+
+    } elseif (is_int($this->answerGuid)) {
+      $answer = get_entity($this->answerGuid);
+
+      if ($answer instanceof ElggAnswer) {
+        $answer->description = $this->description;
+        $answer->save();
+      }
+    }
+  }
+
+  /**
+   * Save the entity.
+   *
+   * @return bool
+   */
   public function save() {
     if (!$this->timeSpent) {
       $this->timeSpent = $this->calculateAnswerTime();
     }
 
-    parent::save();
+    if ($this->answerGuid) {
+      $this->publishOnFrontend();
+    }
+
+    return parent::save();
   }
 }

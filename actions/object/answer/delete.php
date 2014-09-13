@@ -1,4 +1,10 @@
 <?php
+/**
+ * Delete answer object
+ *
+ * @package Questions
+ *
+ */
 
 $guid = (int) get_input('guid');
 $answer = get_entity($guid);

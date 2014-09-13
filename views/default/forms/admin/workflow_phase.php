@@ -1,5 +1,10 @@
 <?php 
-  
+/**
+ * Add workflow form
+ *
+ * @package ElggQuestions
+ */
+
 $form_title = elgg_echo('questions:workflow:phase:add');
 
 if($vars["entity"]){

@@ -1,6 +1,6 @@
 <?php
 /**
- * Edit intanswer page
+ * Edit internal (workflow) answer page
  *
  * @package ElggQuestions
  */

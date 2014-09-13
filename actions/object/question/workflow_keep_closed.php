@@ -1,4 +1,11 @@
 <?php
+/**
+ * Keep workflow closed.
+ * Marks the question green again.
+ * 
+ * @package Questions
+ *
+ */
 
 $guid = (int) get_input('guid');
 $question = get_entity($guid);

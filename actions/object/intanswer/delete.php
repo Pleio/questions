@@ -1,4 +1,10 @@
 <?php
+/**
+ * Delete internal (workflow) answer
+ *
+ * @package Questions
+ *
+ */
 
 $guid = (int) get_input('guid');
 $answer = get_entity($guid);

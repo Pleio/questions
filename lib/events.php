@@ -1,6 +1,9 @@
 <?php
 /**
- * All event handler functions for this plugin can be found in this file.
+ * Event handlers
+ *
+ * @package Questions
+ *
  */
 
 /**

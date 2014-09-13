@@ -1,4 +1,10 @@
 <?php
+/**
+ * Open workflow for a question.
+ * 
+ * @package Questions
+ *
+ */
 
 $guid = (int) get_input('guid');
 $question = get_entity($guid);

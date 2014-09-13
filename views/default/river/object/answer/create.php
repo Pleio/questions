@@ -1,6 +1,8 @@
 <?php
 /**
  * River entry for new answers
+ *
+ * @package Questions
  */
 
 $item = $vars['item'];

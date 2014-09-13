@@ -1,4 +1,10 @@
 <?php
+/**
+ * Answer object
+ *
+ * @package Questions
+ *
+ */
 
 class ElggAnswer extends ElggObject {
 	const SUBTYPE = "answer";

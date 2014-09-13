@@ -1,10 +1,15 @@
 <?php
 /**
- * This file is loaded when all the active plugins get loaded
+ * Initialize questions plugin for ELGG
+ *
+ * @package Questions
  */
 
 define("QUESTIONS_EXPERT_ROLE", "questions_expert");
 define("QUESTIONS_WORKFLOW_PHASE", "questions_workflow_phase");
+define("QUESTION_OBJECT", "question");
+define("ANSWER_OBJECT", "answer");
+define("INTANSWER_OBJECT", "intanswer");
 
 require_once(dirname(__FILE__) . "/lib/functions.php");
 require_once(dirname(__FILE__) . "/lib/events.php");
@@ -32,9 +37,9 @@ function questions_init() {
 	));
 	
 	// make question and answer searchable
-	elgg_register_entity_type("object", 'question');
-	elgg_register_entity_type("object", 'answer');
-	elgg_register_entity_type("object", 'intanswer');
+	elgg_register_entity_type("object", QUESTION_OBJECT);
+	elgg_register_entity_type("object", ANSWER_OBJECT);
+	elgg_register_entity_type("object", INTANSWER_OBJECT);
 	
 	// register widget
 	elgg_register_widget_type('questions', elgg_echo("widget:questions:title"), elgg_echo("widget:questions:description"), "index,profile,dashboard,groups", true);
@@ -47,7 +52,7 @@ function questions_init() {
 	// register group admin options
 	add_group_tool_option('questions', elgg_echo("questions:enable"), false);
 	elgg_extend_view("groups/tool_latest", "questions/group_module");
-	elgg_extend_view("groups/edit", "questions/groups_edit");
+	elgg_extend_view("groups/edit", "plugins/questions/group_settings");
 	
 	// plugin hooks
 	elgg_register_plugin_hook_handler("register", "menu:owner_block", 'questions_owner_block_menu_handler');
@@ -93,7 +98,12 @@ function questions_init() {
 	elgg_register_action('object/intanswer/edit', "$actions_base/save.php");
 	elgg_register_action('intanswers/delete', "$actions_base/delete.php");
 	
+	// Register granular notification for this type
+	//register_notification_object("object", "question", elgg_echo("questions:question:notification:subject"));
+	//register_notification_object("object", "answer", elgg_echo("questions:answer:notification:subject"));
+
 	elgg_register_plugin_hook_handler('unit_test', 'system', 'questions_test');
+	
 }
 
 /**

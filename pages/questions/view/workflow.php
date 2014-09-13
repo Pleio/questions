@@ -1,14 +1,19 @@
 <?php
+/**
+ * View a question, all internal answers
+ *
+ * @package ElggQuestions
+ */
+
 $title = $question->title;
 elgg_push_breadcrumb($title);
 
-if ($question->isWorkflowOpen()) {
-  $title .= " | " . $question->getCurrentWorkflowPhase()->name;
-}
-
 // build page elements
 $title_icon = "";
-$content = elgg_view_entity($question, array('full_view' => true));
+
+$content = elgg_view('object/question/workflow-overview', array('question'=>$question,'full_view'=>true));
+
+$content .= elgg_view_entity($question, array('full_view' => true));
 
 
 $intanswers = "";

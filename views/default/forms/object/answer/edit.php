@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit answer form
+ *
+ * @package ElggQuestions
+ */
 
 $answer = $vars['entity'];
 

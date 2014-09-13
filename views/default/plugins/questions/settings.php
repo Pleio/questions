@@ -1,7 +1,8 @@
 <?php
 /**
- * All plugin settings can be configured by this view
+ * Questions plugin settings view
  *
+ * @package ElggQuestions
  */
 
 $plugin = elgg_extract("entity", $vars);
@@ -73,7 +74,7 @@ echo elgg_view_module("inline", elgg_echo("questions:settings:experts:title"), $
 $expert_settings = "<div>";
 $expert_settings .= elgg_echo("questions:settings:workflow:enable");
 $expert_settings .= elgg_view("input/dropdown", array("name" => "params[workflow_enabled]", "value" => $plugin->workflow_enabled, "options_values" => $noyes_options, "class" => "mls"));
-$expert_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:workflow:enable:description") . "</siv>";
+$expert_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:workflow:enable:description") . "</div>";
 $expert_settings .= "</div>";
 
 $expert_settings .= "<div>";

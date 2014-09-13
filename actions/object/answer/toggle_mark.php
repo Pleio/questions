@@ -1,6 +1,8 @@
 <?php
 /**
- * This action marks an answer as the correct answer for a question.
+ * Mark answer as correct
+ *
+ * @package Questions
  *
  */
 

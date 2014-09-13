@@ -1,4 +1,10 @@
 <?php
+/**
+ * Save the question
+ *
+ * @package Questions
+ *
+ */
 
 elgg_make_sticky_form("question");
 

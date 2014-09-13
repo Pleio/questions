@@ -1,5 +1,11 @@
 <?php
-  
+/**
+ * Workflow phase object
+ *
+ * @package Questions
+ *
+ */
+
 class QuestionsWorkflowPhase extends ElggObject {
   const SUBTYPE = "questions_workflow_phase";
     

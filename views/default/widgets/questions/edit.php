@@ -1,6 +1,8 @@
 <?php
 /**
  * Questions widget settings
+ *
+ * @package Questions
  */
 
 $widget = $vars['entity'];

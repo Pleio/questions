@@ -1,4 +1,10 @@
 <?php
+/**
+ * Question object
+ *
+ * @package Questions
+ *
+ */
 
 class ElggQuestion extends ElggObject {
 	const SUBTYPE = 'question';
@@ -110,7 +116,7 @@ class ElggQuestion extends ElggObject {
 
 		return null;
 	}
-	
+
 	/**
 	 * Set the status of the question.
 	 * 
@@ -157,6 +163,24 @@ class ElggQuestion extends ElggObject {
 	}
 
 	/**
+	 * Check if workflow is too late
+	 *
+	 * @return bool
+	 */
+	public function isWorkflowTooLate() {
+		if (!$this->isWorkflowOpen()) {
+			return false;
+		}
+
+		$currentPhase = $this->getCurrentWorkflowPhase();
+		if ($currentPhase->due && (time() - $this->currentPhaseStart) > $currentPhase->due) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Check if workflow is open
 	 *
 	 * @return bool
@@ -185,7 +209,7 @@ class ElggQuestion extends ElggObject {
 	 */
 	public function getWorkflowLatestTotalTime() {
 		if ($this->isWorkflowOpen()) {
-			return round(questions_time_diff($this->workflowStart, time()));
+			return questions_time_diff($this->workflowStart, time());
 		} else {
 			if ($this->totalAnswerTimes) {
 				$totalAnswerTimes = unserialize($this->totalAnswerTimes);
@@ -193,6 +217,19 @@ class ElggQuestion extends ElggObject {
 			} else {
 				return 0;
 			}
+		}
+	}
+
+	/**
+	 * Get the assigned manager
+	 *
+	 * @return bool|ElggUser
+	 */
+	public function getWorkflowManager() {
+		if ($this->workflowManager && $manager = get_entity($this->workflowManager)) {
+			return $manager;
+		} else {
+			return false;
 		}
 	}
 
@@ -234,6 +271,7 @@ class ElggQuestion extends ElggObject {
 		if ($phaseGuid == end($availablePhases)->guid) {
 			$this->setWorkflowClosed();
 		} else {
+			$this->currentPhaseStart = time();
 			$this->currentPhase = $phaseGuid;
 		}
 
@@ -250,7 +288,10 @@ class ElggQuestion extends ElggObject {
 			$phases = questions_get_phases();
 
 			$this->currentPhase = current($phases)->guid;
+			$this->currentPhaseStart = time();
+			
 			$this->workflowStart = time();
+			$this->workflowManager = elgg_get_logged_in_user_guid();
 
 			return true;
 		}
@@ -269,7 +310,9 @@ class ElggQuestion extends ElggObject {
 		$this->workflowLastView = time();
 
 		unset($this->currentPhase);
+		unset($this->currentPhaseStart);		
 		unset($this->workflowStart);
+		unset($this->workflowManager);
 
 		return true;
 	}

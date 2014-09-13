@@ -1,6 +1,9 @@
 <?php
 /**
- * All helper functions for the questions plugin can be found in this file.
+ * Helper functions
+ *
+ * @package Questions
+ *
  */
 
 /**
@@ -24,23 +27,16 @@ function questions_experts_enabled() {
 }
 
 /**
- * This function checks if the questions workflow is enabled in the plugin settings
+ * This function checks if the questions workflow is enabled in the plugin settings and for the given container
  *
  * @return bool true is enabled, false otherwise
  */
-function questions_workflow_enabled() {
-	static $result;
-
-	if (!isset($result)) {
-		$result = false;
-
-		$setting = elgg_get_plugin_setting("workflow_enabled", "questions");
-		if ($setting == "yes") {
-			$result = true;
-		}
+function questions_workflow_enabled(ElggEntity $container = null) {
+	if ($container && $container instanceof ElggGroup) {
+		return $container->getPrivateSetting('questions_workflow_enabled') == "yes";
 	}
-	
-	return $result;	
+
+	return elgg_get_plugin_setting("workflow_enabled", "questions") == "yes";
 }
 
 /**
@@ -68,7 +64,7 @@ function questions_get_phases($group_id = 0) {
 	    );
 
 			$phases = elgg_get_entities_from_metadata($options);
-			
+
 			$result = array();
 			foreach ($phases as $phase) {
 				$result[$phase->guid] = $phase;
@@ -153,13 +149,16 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 /**
  * Build a wall to block non-experts. Forward non-experts off the page.
  *
- * @param ElggEntity $container the container where a question was asked, leave empty for any relationship
- *
  * @return bool true if the user is an expert, false otherwise
  */
-function questions_expert_gatekeeper() {
-	if (!questions_is_expert(elgg_get_site_entity(), null)) {
-		forward('', 'admin');
+function questions_expert_gatekeeper(ElggEntity $container = null) {
+	if ($container == null) {
+		$container = elgg_get_site_entity();
+	}
+
+	if (!questions_is_expert($container, elgg_get_logged_in_user_entity())) {
+		register_error(elgg_echo('questions:workflow:noaccess'));
+		forward();
 	}
 }
 
@@ -345,7 +344,7 @@ function questions_time_diff(int $beginTS, int $endTS, $workingDays = array(1,2,
 		}
 
 		$diff = $lowerBound->diff($upperBound);
-		return (($diff->h*3600) + ($diff->i*60) + ($diff->s)) / 3600;
+		return (($diff->h*3600) + ($diff->i*60) + ($diff->s));
 	}
 
 	// not on the same day
@@ -383,7 +382,7 @@ function questions_time_diff(int $beginTS, int $endTS, $workingDays = array(1,2,
 		}
 	}
 
-	return $totalTime / 3600;
+	return $totalTime;
 }
 
 /**
@@ -634,4 +633,44 @@ function questions_send_workflow_notification(ElggQuestion $question, QuestionsW
 		elgg_echo("questions:workflow:email:subject", array($question->title)),
 		elgg_echo("questions:workflow:email:body", array($question->getWorkflowURL()))
 	); 
+}
+
+/**
+ * Return a formated timespan
+ * 
+ * @param int $timespan in seconds
+ *
+ * @return string $answer
+ */
+function questions_get_friendly_timespan($timespan) {
+	$minute = 60;
+	$hour = $minute*60;
+		
+
+	if ($timespan < $minute) {
+		if ($timespan == 1) {
+			return elgg_echo("friendlytimespan:seconds:singular", array($timespan));
+		} else {
+			return elgg_echo("friendlytimespan:seconds", array($timespan));
+		}
+	} elseif ($timespan < $hour) {
+		$timespan = round($timespan/$minute);
+
+		if ($timespan > 1) {
+			return elgg_echo("friendlytimespan:minutes", array($timespan));
+		} else {
+			return elgg_echo("friendlytimespan:minutes:singular", array($timespan));
+		}
+	} else {
+		$timespan = round($timespan/$hour);
+		if ($timespan == 0) {
+			$timespan = 1;
+		}
+
+		if ($timespan > 1) {
+			return elgg_echo("friendlytimespan:hours", array($timespan));
+		} else {
+			return elgg_echo("friendlytimespan:hours:singular", array($timespan));
+		}
+	}
 }

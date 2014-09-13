@@ -1,4 +1,10 @@
 <?php
+/**
+ * View a question, all answers
+ *
+ * @package ElggQuestions
+ */
+
 $title = $question->title;
 elgg_push_breadcrumb($title);
 
@@ -20,7 +26,8 @@ $options = array(
   'subtype' => 'answer',
   'container_guid' => $question->guid,
   'count' => true,
-  'limit' => false
+  'limit' => false,
+  'pagination' => false
 );
 
 if ($correctAnswer) {

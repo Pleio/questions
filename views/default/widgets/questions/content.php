@@ -1,7 +1,9 @@
 <?php
 /**
- *	Questions widget content
- **/
+ * Questions widget
+ *
+ * @package Questions
+ */
 
 $widget = $vars["entity"];
 

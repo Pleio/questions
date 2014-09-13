@@ -1,5 +1,10 @@
 <?php
-$language = array (
+/**
+ * Dutch language
+ *
+ * @package Questions
+ */
+$language = array(
   'questions:menu:user_hover:make_expert:confirm' => 'Weet je zeker dat je deze gebruiker een Vragen expert wilt maken van %s?',
   'questions:menu:user_hover:remove_expert:confirm' => 'Weet je zeker dat je deze gebruiker wilt verwijderen als Vragen expert van %s?',
   'questions:edit:question:move_to_discussions' => 'Verplaats naar discussies',
@@ -17,6 +22,9 @@ $language = array (
   'questions:menu:entity:answer:mark' => 'Dit is correct',
   'questions:menu:entity:answer:unmark' => 'Dit is niet correct',
   'questions:menu:filter:experts' => 'Experts',
+  'questions:menu:filter:todo' => 'Todo',
+  'questions:menu:filter:todo_group' => "Todo",
+  'questions:todo:none' => 'Er is niets te doen, goed werk!',
   'river:create:object:question' => '%s stelde vraag %s',
   'river:create:object:answer' => '%s ga een antwoord op de vraag %s',
   'questions' => 'Vragen',
@@ -62,7 +70,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:settings:general:close:description' => 'Als een antwoord op een vraag als het juiste antwoord wordt gemarkeerd, sluit de vraag. Er kunnen dan geen nieuwe antwoorden meer worden gegeven.',
   'questions:settings:general:solution_time' => 'Standaard beantwoordingstermijn in dagen',
   'questions:settings:general:solution_time:description' => 'Het correcte antwoord moet gegeven worden voordat deze tijd verloopt. Groepen kunnen een afwijkende instelling hebben. Kies 0 voor geen oplostermijn.',
-  'questions:settings:general:limit_to_groups' => 'Beperk vragen to groepen',
+  'questions:settings:general:limit_to_groups' => 'Beperk vragen tot groepen',
   'questions:settings:general:limit_to_groups:description' => 'Indien \'ja\', kunnen vragen alleen in groepen worden gesteld.',
   'questions:settings:experts:title' => 'Expert instellingen',
   'questions:settings:experts:enable' => 'Activeer expert rollen',
@@ -82,7 +90,7 @@ Klik hier om de vraag te beantwoorden:
   'widget:questions:description' => 'Overzicht van vragen',
   'widget:questions:content_type' => "Welke vragen moeten getoond worden?",
   'questions:action:answer:save:error:container' => 'U heeft geen toestemming om een antwoord te geven op deze vraag',
-  'questions:action:answer:save:error:body' => 'Een antwoord is verplicht: %s, %s',
+  'questions:action:answer:save:error:body' => 'Een antwoord is verplicht',
   'questions:action:answer:save:error:save' => 'Er was een probleem met het opslaan van uw antwoord',
   'questions:action:answer:save:error:question_closed' => 'De vraag die u probeert te beantwoorden is reeds gesloten',
   'questions:action:answer:toggle_mark:error:not_allowed' => 'U heeft geen toestemming om dit antwoord als het correcte antwoord te markeren',
@@ -100,6 +108,9 @@ Klik hier om de vraag te beantwoorden:
   // Workflow system
   'questions:workflow' => 'Workflow',
   'questions:menu:workflow' => 'Workflow',
+  'questions:workflow:notenabled' => 'Workflow is niet geactiveerd',
+  'questions:workflow:noaccess' => 'Geen toegang tot workflow',
+  'questions:workflow:nogroup' => 'Geen geldige groep',
   'questions:workflow:hours' => 'uur',
   'questions:workflow:intanswers' => 'interne antwoorden',
   'questions:workflow:addyours' => 'Antwoord toevoegen',
@@ -120,10 +131,23 @@ Klik hier om de vraag te beantwoorden:
   'questions:settings:workflow:enable' => 'Activeren',
   'questions:settings:workflow:enable:description' => 'Vragen kunnen systematisch beantwoord worden met het workflow systeem.',
   'questions:settings:workflow:phases' => 'Fases',
+  'questions:groupsettings:workflow:enable' => 'Workflow activeren',
+  'questions:groupsettings:workflow:enable:description' => 'Vragen kunnen systematisch beantwoord worden met het workflow systeem.',  
+  'questions:workflow:nophase' => 'Geen fase',
   'questions:workflow:phase:edit' => 'Wijzig fase',
   'questions:workflow:phase:name' => 'Naam',
   'questions:workflow:phase:due' => 'Maximale looptijd',
   'questions:workflow:phase:email' => 'E-mail notificatie',
-  'questions:settings:predefined_tags:title' => 'Voorgedefinieerde tags'
+  'questions:workflow:none' => 'Geen',
+  'questions:settings:predefined_tags:title' => 'Voorgedefinieerde tags',
+  'questions:workflow:publishedFront' => 'geplaatst op voorkant',
+  'questions:question:notification:subject'=> 'Er is een nieuwe vraag gemaakt',
+  'questions:answer:notification:subject'=> 'Er is een nieuw antwoord gemaakt',
+  'friendlytimespan:seconds' => '%s seconden',
+  'friendlytimespan:seconds:singular' => '%s seconde',
+  'friendlytimespan:minutes' => '%s minuten',
+  'friendlytimespan:minutes:singular' => '%s minuut',
+  'friendlytimespan:hours' => '%s uur',
+  'friendlytimespan:hours:singular' => '%s uur'
 );
 add_translation("nl", $language);

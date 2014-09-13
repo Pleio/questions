@@ -1,4 +1,10 @@
 <?php
+/**
+ * Workflow internal (workflow) answer object
+ *
+ * @package ElggQuestions
+ */
+
 $intanswer = $vars['entity'];
 
 $image = elgg_view_entity_icon(get_entity($intanswer->owner_guid), 'small');
@@ -11,15 +17,19 @@ $friendly_time = elgg_view_friendly_time($intanswer->time_created);
 $subtitle = $owner_link . " " . $friendly_time;
 
 if (isset($intanswer->phase_guid)) {
-  $subtitle .= " | " . get_entity($intanswer->phase_guid)->name;
+  $subtitle .= ", " . $intanswer->getPhase()->name;
 }
 
 if (isset($intanswer->email)) {
-  $subtitle .= " | " . elgg_echo("questions:workflow:email:notification:sent");
+  $subtitle .= ", " . elgg_echo("questions:workflow:email:notification:sent");
 }
 
 if (isset($intanswer->timeSpent)) {
-  $subtitle .= " | " . $intanswer->timeSpent . " " . elgg_echo("questions:workflow:hours");
+  $subtitle .= ", " . questions_get_friendly_timespan($intanswer->timeSpent);
+}
+
+if (isset($intanswer->answerGuid)) {
+  $subtitle .= ", " . elgg_echo("questions:workflow:publishedFront");
 }
 
 // build entity menu

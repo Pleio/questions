@@ -1,4 +1,9 @@
 <?php
+/**
+ * Question form
+ *
+ * @package ElggQuestions
+ */
 
 $question = elgg_extract("entity", $vars);
 $editing = true;

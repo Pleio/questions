@@ -1,19 +1,25 @@
 <?php 
-  $options = array(
-      "type" => "object",
-      "subtype" => QUESTIONS_WORKFLOW_PHASE,
-      "limit" => false,
-      "order_by_metadata" => array(array('name' => 'order', 'direction' => "asc", 'as' => "integer")),
-      "owner_guid" => elgg_get_site_entity()->guid,
-      "pagination" => false,
-      "full_view" => false
-    );
+/**
+ * Display admin workflow phase list
+ *
+ * @package ElggQuestions
+ */
 
-  $list = elgg_list_entities_from_metadata($options); 
+$options = array(
+    "type" => "object",
+    "subtype" => QUESTIONS_WORKFLOW_PHASE,
+    "limit" => false,
+    "order_by_metadata" => array(array('name' => 'order', 'direction' => "asc", 'as' => "integer")),
+    "owner_guid" => elgg_get_site_entity()->guid,
+    "pagination" => false,
+    "full_view" => false
+  );
 
-  if(empty($list)){
-    $list = elgg_echo("questions:phases:no_fields");
-  }
+$list = elgg_list_entities_from_metadata($options); 
+
+if(empty($list)){
+  $list = elgg_echo("questions:phases:no_fields");
+}
   
 ?>
 <div class="elgg-module elgg-module-inline">

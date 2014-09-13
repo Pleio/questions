@@ -1,6 +1,12 @@
-<?php ?>
+<?php 
+/**
+ * Plugin styling
+ *
+ * @package ElggQuestions
+ */
+?>
 
-/* questions css */
+/* Begin of Questions plugin */
 
 .questions-checkmark {
 	width: 40px;
@@ -34,4 +40,53 @@
 	background-position: 0 -126px;
 }
 
-/* end questions css*/
+span.question-workflow-status {
+	color: green;
+	font-size: 18px;
+	padding-right: 5px;
+}
+
+span.question-workflow-status.check {
+	color: black;
+}
+
+span.question-workflow-status.late {
+	color:red;
+}
+
+div.question-workflow-overview {
+	
+}
+
+div.question-workflow-overview.full {
+	border-bottom:1px solid #cccccc;
+	padding-bottom:10px;
+	margin-bottom:10px;
+}
+
+div.question-workflow-overview.right {
+	float:right;
+}
+
+div.question-workflow-overview.manager {
+	float:left;
+	width: 90px;	
+	padding-left: 10px;
+	padding-right: 10px;		
+}
+
+div.question-workflow-overview.phase {
+	float:left;
+	width: 100px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+div.question-workflow-overview.timespan {
+	float:left;
+	width: 90px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+/* End of Questions plugin */

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit internal (workflow) answer form
+ *
+ * @package ElggQuestions
+ */
 
 $intanswer = $vars['entity'];
 $phases = questions_get_phases_array();

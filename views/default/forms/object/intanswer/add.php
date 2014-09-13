@@ -1,4 +1,9 @@
 <?php
+/**
+ * Add internal (workflow) answer form
+ *
+ * @package ElggQuestions
+ */
 
 $vars['entity'] = new ElggIntAnswer();
 $vars['entity']->container_guid = $vars['container_guid'];

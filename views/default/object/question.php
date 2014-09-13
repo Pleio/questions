@@ -1,15 +1,22 @@
 <?php
 /**
- * Question entity view
+ * Question object view
  *
  * @package Questions
 */
 
 $full = elgg_extract("full_view", $vars, false);
 $question = elgg_extract("entity", $vars, false);
+$workflow = elgg_extract("workflow", $vars, false);
 
 if (!$question) {
 	return true;
+}
+
+if ($workflow) {
+	$url = $question->getWorkflowURL();
+} else {
+	$url = $question->getURL();
 }
 
 $poster = $question->getOwnerEntity();
@@ -19,6 +26,7 @@ $poster_link = elgg_view("output/url", array("text" => $poster->name, "href" => 
 $poster_text = elgg_echo("questions:asked", array($poster_link));
 
 $container = $question->getContainerEntity();
+
 if (elgg_instanceof($container, "group") && (elgg_get_page_owner_guid() != $container->getGUID())) {
 	$group_link = elgg_view("output/url", array("text" => $container->name, "href" => "questions/group/" . $container->getGUID() . "/all", "is_trusted" => true));
 	$poster_text .= " " . elgg_echo("river:ingroup", array($group_link));
@@ -31,7 +39,7 @@ $date = elgg_view_friendly_time($question->time_created);
 
 $answers_link = "";
 
-if (get_input('workflow')) {
+if ($workflow) {
 	$answer_subtype = "intanswer";
 } else {
 	$answer_subtype = "answer";
@@ -41,7 +49,7 @@ $answer_options = array(
 	"type" => "object",
 	"subtype" => $answer_subtype,
 	"container_guid" => $question->getGUID(),
-	"count" => true,
+	"count" => true
 );
 
 $num_answers = elgg_get_entities($answer_options);
@@ -53,7 +61,7 @@ if ($num_answers != 0) {
 	
 	$correct_answer = $question->getCorrectAnswer();
 
-	if ($correct_answer) {
+	if ($correct_answer && !$workflow) {
 		$poster = $correct_answer->getOwnerEntity();
 		$answer_time = elgg_view_friendly_time($correct_answer->time_created);
 		$answer_link = elgg_view("output/url", array("href" => $poster->getURL(), "text" => $poster->name));
@@ -68,7 +76,7 @@ if ($num_answers != 0) {
 	}
 	
 	$answers_link = elgg_view("output/url", array(
-		"href" => $question->getURL() . "#question-answers",
+		"href" => $url . "#question-answers",
 		"text" => elgg_echo("answers") . " ($num_answers)",
 	));
 }
@@ -140,18 +148,16 @@ if ($full) {
 } else {
 	// brief view
 	$title_text = "";
-	if ($question->getCorrectAnswer()) {
+	if ($question->getCorrectAnswer() && !$workflow) {
 		$title_text = elgg_view_icon("checkmark", "mrs question-listing-checkmark");
 	}
 	$title_text .= elgg_get_excerpt($question->title, 100);
 
-	if (get_input('workflow') == true) {
-		$url = $question->getWorkflowURL();
-	} else {
-		$url = $question->getURL();
+	if ($workflow) {
+		$title = elgg_view('object/question/workflow_status', array('question'=>$question));
 	}
 
-	$title = elgg_view("output/url", array(
+	$title .= elgg_view("output/url", array(
 		"text" => $title_text,
 		"href" => $url,
 		"is_trusted" => true
@@ -167,19 +173,15 @@ if ($full) {
 		"content" => $answer_text
 	);
 
-	if (get_input('workflow')) {
+	if ($workflow) {
 		if ($question->isWorkflowOpen()) {
-			$params['title'] .= " | " . $question->getCurrentWorkflowPhase()->name;
-		}
-		$params['title'] .= " | " . $question->getWorkflowLatestTotalTime() . " " . elgg_echo("questions:workflow:hours");		
-
-		if ($question->hasNewAnswers()) {
-			$params['title'] .= " | " . elgg_echo("questions:workflow:newanswers");
+			$phaseName = $question->getCurrentWorkflowPhase()->name;
+		} else {		
+			$phaseName = $lastPhase->name;
 		}
 
+		$params['metadata'] = elgg_view("object/question/workflow_overview", array('question'=>$question));
 	}
-
-
 
 	$list_body = elgg_view("object/elements/summary", $params);
 
