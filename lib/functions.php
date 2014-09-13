@@ -459,6 +459,10 @@ function questions_notify_experts(ElggQuestion $entity, $moving = false) {
  */
 function questions_get_solution_time(ElggEntity $container) {
 	$result = 0;
+
+	if (questions_workflow_enabled()) {
+		return 0;
+	}
 	
 	// get site setting
 	$result = (int) elgg_get_plugin_setting("site_solution_time", "questions");
@@ -574,21 +578,24 @@ function questions_backdate_annotation($annotation_id, $time_created) {
  * @return int $ac_id the access id
  */
 function questions_get_workflow_access_collection($group_id = 0) {
+
 	if (!$group_id) {
 		$entity = elgg_get_site_entity();
 	} else {
 		$entity = get_entity($group_id);
-		if ($entity instanceof ElggGroup && !$entity->getPrivateSetting('workflowACL')) {
-			$aclGuid = create_access_collection("Workflow " . $entity->name, $entity->guid);
-			$entity->setPrivateSetting('workflowACL', $aclGuid);
+		if (!$entity instanceof ElggGroup) {
+			throw new Exception("Given entity is not a group.");
 		}
 	}
 
-	if ($acl = $entity->getPrivateSetting('workflowACL')) {
-		return $acl;
-	} else {
-		return false;
+	$aclGuid = $entity->getPrivateSetting('workflow_acl');
+
+	if (!$aclGuid) {
+		$aclGuid = create_access_collection("Workflow " . $entity->name, $entity->guid);
+		$entity->setPrivateSetting('workflow_acl', $aclGuid);
 	}
+
+	return $aclGuid;
 }
 
 /**
