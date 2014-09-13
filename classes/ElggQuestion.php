@@ -85,7 +85,7 @@ class ElggQuestion extends ElggObject {
 		} 
 
 		if ($this->workflowLastView) {
-			if ($this->workflowLastView > $this->getLatestAnswer()->time_created) {
+			if ($this->workflowLastView >= $this->getLatestAnswer()->time_created) {
 				return false;
 			}
 		}

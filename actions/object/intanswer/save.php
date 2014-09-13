@@ -67,6 +67,7 @@ $intanswer->container_guid = $container_guid;
 try {
   if ($answer_frontend == 1) {
     $intanswer->answerGuid = true;
+    $question->workflowLastView = time();
   }
 
   $intanswer->save();
