@@ -297,29 +297,31 @@ function questions_close_on_marked_answer() {
  * @return int difference between timestamps (hours)
  */
 function questions_time_diff(int $beginTS, int $endTS, $workingDays = array(1,2,3,4,5), DateTime $workBeginTime, DateTime $workEndTime) {
-	$totalTime = 0;
+
+	if ($beginTS == 0 | $endTS == 0 | $beginTS >= $endTS) {
+		return 0;
+	}
 
 	if (!$workBeginTime) {
 		$workBeginTime = new DateTime("09:00");
 	}
 	if (!$workEndTime) {
-		$workEndTime = new DateTime("20:00");
+		$workEndTime = new DateTime("17:00");
 	}
-
-	$diff = $workBeginTime->diff($workEndTime);
-	$secondsPerDay = ($diff->h*3600) + ($diff->i*60) + ($diff->s);
 
 	$begin = new DateTime();
 	$begin->setTimeStamp($beginTS);
 	$end = new DateTime();
 	$end->setTimeStamp($endTS);
 
-	if ($beginTS == 0 | $endTS == 0 | $beginTS >= $endTS) {
-		return 0;
-	}
-
 	// on the same day
 	if ($begin->format("Ymd") == $end->format("Ymd")) {
+		// return zero if this day is not a working day
+		if (!in_array($begin->format("N"), $workingDays)) {
+			return 0;
+		}
+
+		// format as times
 		$beginTime = new DateTime($begin->format("H:i:s"));
 		$endTime = new DateTime($end->format("H:i:s"));
 
@@ -345,44 +347,65 @@ function questions_time_diff(int $beginTS, int $endTS, $workingDays = array(1,2,
 
 		$diff = $lowerBound->diff($upperBound);
 		return (($diff->h*3600) + ($diff->i*60) + ($diff->s));
-	}
+	} else {
+		// not on the same day
+		$totalTime = 0;
 
-	// not on the same day
-	if (in_array($begin->format('N'), $workingDays)) {
-		$beginTime = new DateTime($begin->format("H:i:s"));
-		if ($beginTime < $workBeginTime) {
-			$totalTime = $totalTime + $secondsPerDay;
-		} elseif ($beginTime > $workBeginTime && $beginTime < $workEndTime) {
-			$diff = $beginTime->diff($workEndTime);
-			$totalTime = $totalTime + ($diff->h*3600) + ($diff->i*60) + ($diff->s);			
+		// calculate the working time on the first day
+		if (in_array($begin->format('N'), $workingDays)) {
+			$beginTime = new DateTime($begin->format("H:i:s"));
+
+			if ($beginTime < $workBeginTime) {
+				$lowerBound = $workBeginTime;
+			} elseif ($beginTime > $workBeginTime && $beginTime < $workEndTime) {
+				$lowerBound = $beginTime;
+			} else {
+				$lowerBound = $workEndTime;
+			}
+
+			$upperBound = $workEndTime;
+
+			$diff = $lowerBound->diff($upperBound);
+			$totalTime = $totalTime + ($diff->h*3600) + ($diff->i*60) + ($diff->s);
 		}
-	}
 
-	if (in_array($end->format('N'), $workingDays)) {
-		$endTime = new DateTime($end->format("H:i:s"));
-		if ($endTime > $workBeginTime && $endTime < $workEndTime) {
-			$diff = $workBeginTime->diff($endTime);
-			$totalTime = $totalTime + ($diff->h*3600) + ($diff->i*60) + ($diff->s);			
-		} elseif ($endTime > $workEndTime) {
-			$totalTime = $totalTime + $secondsPerDay;
+		// calculate the working time on the last day
+		if (in_array($end->format('N'), $workingDays)) {
+			$endTime = new DateTime($end->format("H:i:s"));
+			
+			$lowerBound = $workBeginTime;
+
+			if ($endTime < $workBeginTime) {
+				$upperBound = $workBeginTime;
+			} elseif ($endTime > $workBeginTime && $endTime < $workEndTime) {
+				$upperBound = $endTime;
+			} else {
+				$upperBound = $workEndTime;
+			}
+
+			$diff = $lowerBound->diff($upperBound);
+			$totalTime = $totalTime + ($diff->h*3600) + ($diff->i*60) + ($diff->s);
 		}
-	}
 
-	// set to beginning of the next day
-	$begin->modify('midnight +1 day');	
+		// set to beginning of the next day
+		$begin->modify('midnight +1 day');	
 
-	// set to last midnight
-	$end->modify('midnight');
-
-	$period = new DatePeriod($begin, new DateInterval('P1D'), $end);
-
-	foreach ($period as $day) {
-		if (in_array($day->format('N'), $workingDays)) {
-			$totalTime = $totalTime + $secondsPerDay;
+		// set to last midnight
+		$end->modify('midnight');
+		
+		$diff = $workBeginTime->diff($workEndTime);
+		$secondsPerDay = ($diff->h*3600) + ($diff->i*60) + ($diff->s);
+		
+		// calculate the workingtime on the days inbetween
+		$period = new DatePeriod($begin, new DateInterval('P1D'), $end);		
+		foreach ($period as $day) {
+			if (in_array($day->format('N'), $workingDays)) {
+				$totalTime = $totalTime + $secondsPerDay;
+			}
 		}
-	}
 
-	return $totalTime;
+		return $totalTime;
+	}
 }
 
 /**

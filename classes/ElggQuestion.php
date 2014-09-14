@@ -118,7 +118,7 @@ class ElggQuestion extends ElggObject {
 	}
 
 	/**
-	 * Set the status of the question.
+	 * Set the status of the question (todo).
 	 * 
 	 * This can be
 	 * - 'open'
@@ -136,7 +136,7 @@ class ElggQuestion extends ElggObject {
 	}
 	
 	/**
-	 * Get the current status of the question.
+	 * Get the current status of the question (todo).
 	 *
 	 * This can be
 	 * - 'open'
@@ -271,12 +271,43 @@ class ElggQuestion extends ElggObject {
 		if ($phaseGuid == end($availablePhases)->guid) {
 			$this->setWorkflowClosed();
 		} else {
-			$this->currentPhaseStart = time();
+			$this->setCurrentPhaseStart();
 			$this->currentPhase = $phaseGuid;
 		}
 
 		return true;
 	}
+
+	/**
+	 * Configure the start time when a new phase is started.
+	 * In some cases this start time is earlier, because we
+	 * want to take the time into account when the same phase was
+	 * started earlier in this cycle.
+	 * 
+	 * @return bool
+	 */
+	public function setCurrentPhaseStart() {
+
+		$intAnswers = $this->getIntAnswers(array(
+			'created_time_lower' => $this->workflowStart
+		));
+
+		if (!$intAnswers) {
+			$this->currentPhaseStart = time();
+			return true;
+		}
+
+		$bringForward = 0;
+		foreach ($intAnswers as $intAnswer) {
+			if ($intAnswer->phase_guid == $this->currentPhase) {
+				$bringForward = $bringForward + $intAnswer->timeSpent;
+			}
+		}
+
+		$this->currentPhaseStart = time() - $bringForward;
+		return true;
+	}
+
 
 	/**
 	 * Open workflow for question and change phase to the first phase
@@ -288,7 +319,7 @@ class ElggQuestion extends ElggObject {
 			$phases = questions_get_phases();
 
 			$this->currentPhase = current($phases)->guid;
-			$this->currentPhaseStart = time();
+			$this->setCurrentPhaseStart();
 			
 			$this->workflowStart = time();
 			$this->workflowManager = elgg_get_logged_in_user_guid();
