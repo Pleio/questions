@@ -39,7 +39,10 @@ function questions_init() {
 	// make question and answer searchable
 	elgg_register_entity_type("object", QUESTION_OBJECT);
 	elgg_register_entity_type("object", ANSWER_OBJECT);
-	elgg_register_entity_type("object", INTANSWER_OBJECT);
+
+	if (questions_workflow_enabled()) { 
+		elgg_register_entity_type("object", INTANSWER_OBJECT);
+	}
 	
 	// register widget
 	elgg_register_widget_type('questions', elgg_echo("widget:questions:title"), elgg_echo("widget:questions:description"), "index,profile,dashboard,groups", true);
@@ -48,8 +51,6 @@ function questions_init() {
 	elgg_register_page_handler('questions', 'questions_page_handler');
 	elgg_register_page_handler('answers', 'answers_page_handler');
 	elgg_register_page_handler('intanswers', 'intanswers_page_handler');
-	
-	//elgg_register_page_handler('admin', 'question_admin_page_handler');
 
 	// register group admin options
 	add_group_tool_option('questions', elgg_echo("questions:enable"), false);

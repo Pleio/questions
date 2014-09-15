@@ -32,6 +32,10 @@ if (isset($intanswer->answerGuid)) {
   $subtitle .= ", " . elgg_echo("questions:workflow:publishedFront");
 }
 
+if (isset($intanswer->workflowCloseCycle)) {
+  $subtitle .= ", " . elgg_echo("questions:workflow:closed");
+}
+
 // build entity menu
 $entity_menu = elgg_view_menu('entity', array(
   'entity' => $vars['entity'],

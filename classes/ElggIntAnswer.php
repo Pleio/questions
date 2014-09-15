@@ -64,7 +64,7 @@ class ElggIntAnswer extends ElggObject {
    */
   public function calculateAnswerTime() {
     $question = $this->getQuestion();
-  
+
     if ($previousAnswers = $question->getIntAnswers()) {
       $latestAnswer = $previousAnswers[0];
 

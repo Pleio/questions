@@ -5,10 +5,10 @@
  * @package ElggQuestions
  */
 
-$title = elgg_echo('questions:csv_export');
-$description = '<p>' . elgg_echo('questions:csv_export:description') .'</p>';
+$title = elgg_echo('admin:questions:csv_export');
+$description = '<p>' . elgg_echo('questions:workflow:csv_export:description') .'</p>';
 $params = array(
-  'text' => elgg_echo('questions:csv_export:download'),
+  'text' => elgg_echo('questions:workflow:csv_export:download'),
   'href' => 'action/questions/csv_export',
   'class' => 'elgg-button elgg-button-submit',
   'is_action' => true,

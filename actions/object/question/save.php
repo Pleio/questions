@@ -85,7 +85,7 @@ $container = $question->getContainerEntity();
 if (!$adding) {
 	$forward_url = $question->getURL();
 } elseif ($container instanceof ElggUser) {
-	$forward_url = "questions/owner/" . $container->username;
+	$forward_url = "questions/all";
 } else {
 	$forward_url = "questions/group/" . $container->getGUID() . "/all";
 }

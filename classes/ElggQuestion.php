@@ -199,7 +199,11 @@ class ElggQuestion extends ElggObject {
 			return false;
 		}
 
-		return get_entity($this->currentPhase);
+		access_show_hidden_entities(true);
+		$entity = get_entity($this->currentPhase);
+		access_show_hidden_entities(false);
+
+		return $entity;
 	}
 
 	/**
@@ -339,6 +343,10 @@ class ElggQuestion extends ElggObject {
 		$latestTotalTime = $this->getWorkflowLatestTotalTime();
 		$this->appendWorkflowTotalTime($latestTotalTime);
 		$this->workflowLastView = time();
+
+		$latestAnswer = current($this->getIntAnswers());
+		$latestAnswer->workflowCloseCycle = true;
+		$latestAnswer->save();
 
 		unset($this->currentPhase);
 		unset($this->currentPhaseStart);		

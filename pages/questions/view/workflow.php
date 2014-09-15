@@ -48,7 +48,7 @@ if ($question->canWriteToContainer(0, 'object', 'answer')) {
         'container_guid' => $question->guid, 
         'current_phase_guid' => $question->currentPhase
     ));
-    $content .= elgg_view_module('info', elgg_echo('questions:workflow:addyours'), $add_form);
+    $content .= elgg_view_module('info', elgg_echo('questions:workflow:addyours', array($question->getCurrentWorkflowPhase()->name)), $add_form);
   } else {
     $open_workflow = elgg_view("questions/workflow/open", array('question'=>$question));
     $content .= elgg_view_module('info', elgg_echo('questions:workflow:open:title'), $open_workflow);

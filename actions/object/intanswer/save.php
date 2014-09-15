@@ -56,13 +56,14 @@ if (!$access_collection_guid) {
 
 $intanswer->access_id = $access_collection_guid;
 $intanswer->description = $description;
+$intanswer->container_guid = $container_guid;
 
 if ($adding && isset($phase_guid)) {
   $intanswer->phase_guid = $question->getCurrentWorkflowPhase()->guid;
+  $intanswer->save();
+  
   $question->changeWorkflowPhase($phase_guid);
 }
-
-$intanswer->container_guid = $container_guid;
 
 try {
   if ($answer_frontend == 1) {

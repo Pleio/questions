@@ -113,11 +113,21 @@ $expert_settings .= "</div>";
 
 $expert_settings .= "<div id=\"questions-workflow-settings\" style=\"display:none;\">";
 
+$expert_settings .= "<div style=\"float:right\">";
+$params = array(
+  'text' => elgg_echo('questions:workflow:csv_export:download'),
+  'href' => 'admin/questions/csv_export',
+  'class' => 'elgg-button elgg-button-submit',
+  'is_action' => true,
+  'is_trusted' => true,
+);
+$expert_settings .= '<p>' . elgg_view('output/url', $params) . '</p>';
+$expert_settings .= "</div>";
+
 $expert_settings .= "<div>";
 $expert_settings .= elgg_echo("questions:settings:workflow:phases");
-$expert_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:workflow:phases:description") . "</div>";
+$expert_settings .= "<div class=\"elgg-subtext\">" . elgg_echo("questions:settings:workflow:phases:description") . "</div>";
 $expert_settings .= elgg_view("questions/admin/workflow_phase/list");
-$expert_settings .= "</div>";
 
 $expert_settings .= "<div>";
 $expert_settings .= elgg_echo("questions:settings:workflow:workingtimes");
