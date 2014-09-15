@@ -7,6 +7,18 @@
 
 $form_title = elgg_echo('questions:workflow:phase:add');
 
+$due_options = array(
+  0 => elgg_echo("questions:workflow:phase:due:nolimit"),
+  60*15 => elgg_echo("friendlytimespan:minutes", array("15")),
+  60*30 => elgg_echo("friendlytimespan:minutes", array("30")),
+  60*45 => elgg_echo("friendlytimespan:minutes", array("45")),
+  3600 => elgg_echo("friendlytimespan:hours:singular", array("1")),
+);
+
+for ($i = 2; $i <= 40; $i++) {
+  $due_options[3600*$i] = elgg_echo("friendlytimespan:hours", array($i));
+}
+
 if($vars["entity"]){
   $form_title = elgg_echo('questions:workflow:phase:edit');
 
@@ -17,10 +29,12 @@ if($vars["entity"]){
 } 
 
 $formbody .= elgg_echo('questions:workflow:phase:name') . ":" . elgg_view('input/text', array('name' => 'name', "value" => $name));
-$formbody .= "<br />";
-$formbody .= elgg_echo('questions:workflow:phase:due') . ":" . elgg_view('input/text', array('name' => 'due', "value" => $due));
+$formbody .= "<br /><br />";
+$formbody .= elgg_echo('questions:workflow:phase:due') . ":" . elgg_view('input/dropdown', array('name' => 'due', "value" => $due, "options_values" => $due_options));
+$formbody .= "<div class=\"elgg-subtext\">" . elgg_echo('questions:workflow:phase:due:description') . "</div>";
 $formbody .= "<br />";
 $formbody .= elgg_echo('questions:workflow:phase:email') . ":" . elgg_view('input/text', array('name' => 'email', "value" => $email));
+$formbody .= "<div class=\"elgg-subtext\">" . elgg_echo('questions:workflow:phase:email:description') . "</div>";
 $formbody .= "<br />";
 
 $formbody .= elgg_view('input/hidden', array('name' => 'guid', "value" => $guid));
@@ -38,4 +52,4 @@ $form = elgg_view('input/form', array('body' => $formbody, 'action' => $vars['ur
   <div class="elgg-body">
     <?php echo $form; ?>
   </div>
-</div>
+</div>  

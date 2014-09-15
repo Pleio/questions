@@ -30,7 +30,16 @@ if(!empty($guid)){
 if(!is_null($entity)){
   $entity->name = $name;
   $entity->due = $due;
-  $entity->email = $email;
+
+  try {
+    if ($email && validate_email_address($email)) {
+      $entity->email = $email;
+    } else {
+      unset($entity->email);
+    }
+  } catch(RegistrationException $exception) {
+    register_error(elgg_echo("questions:workflow:action:phases:save:email:error"));
+  }
 
   // add correct order
   if($add){
