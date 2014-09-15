@@ -154,7 +154,7 @@ if ($full) {
 	$title_text .= elgg_get_excerpt($question->title, 100);
 
 	if ($workflow) {
-		$title = elgg_view('object/question/workflow_status', array('question'=>$question));
+		$title = elgg_view('questions/workflow/status', array('question'=>$question));
 	}
 
 	$title .= elgg_view("output/url", array(
@@ -174,13 +174,7 @@ if ($full) {
 	);
 
 	if ($workflow) {
-		if ($question->isWorkflowOpen()) {
-			$phaseName = $question->getCurrentWorkflowPhase()->name;
-		} else {		
-			$phaseName = $lastPhase->name;
-		}
-
-		$params['metadata'] = elgg_view("object/question/workflow_overview", array('question'=>$question));
+		$params['metadata'] = elgg_view("questions/workflow/overview", array('question'=>$question));
 	}
 
 	$list_body = elgg_view("object/elements/summary", $params);

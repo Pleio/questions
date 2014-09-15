@@ -22,7 +22,7 @@ $page_owner = $question->getContainerEntity();
 $crumbs_title = $page_owner->name;
 
 if (elgg_instanceof($page_owner, 'group')) {
-  $base_url = "questions/group/$page_owner->guid";
+  $base_url = "questions/group/$page_owner->guid/all";
   elgg_push_breadcrumb($crumbs_title, $base_url);
 } else {
   $base_url = "questions";
@@ -35,11 +35,13 @@ if ($workflow == true) {
 if ($workflow == true) {
   include("view/workflow.php");
 } else {
-  include("view/answers.php");
+  include("view/frontend.php");
 }
 
+$content = $overview . $content;
+
 $body = elgg_view_layout('content', array(
-  'title' => $title_icon . $title,
+  'title' => $title,
   'content' => $content,
   'filter' => '',
 ));

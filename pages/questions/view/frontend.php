@@ -10,6 +10,14 @@ elgg_push_breadcrumb($title);
 
 // build page elements
 $title_icon = "";
+
+// switch to go from frontend to backend
+if (questions_workflow_enabled() && questions_is_expert($page_owner)) {
+  $overview = elgg_view('questions/overview', array('question'=>$question));
+} else {
+  $overview = "";
+}
+
 $content = elgg_view_entity($question, array('full_view' => true));
 
 $answers = "";
@@ -51,7 +59,7 @@ if (elgg_is_active_plugin("likes")) {
 $answers .= elgg_list_entities($options);
 
 $count = elgg_get_entities($options);
-if ($marked_answer) {
+if ($correctAnswer) {
   $count++;
 }
 

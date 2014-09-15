@@ -11,10 +11,10 @@ elgg_push_breadcrumb($title);
 // build page elements
 $title_icon = "";
 
-$content = elgg_view('object/question/workflow-overview', array('question'=>$question,'full_view'=>true));
+// switch to go from backend to frontend
+$overview = elgg_view('questions/workflow/overview', array('question'=>$question,'full_view'=>true));
 
-$content .= elgg_view_entity($question, array('full_view' => true));
-
+$content = elgg_view_entity($question, array('full_view' => true));
 
 $intanswers = "";
 

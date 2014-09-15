@@ -63,7 +63,7 @@ function questions_init() {
 	elgg_register_plugin_hook_handler("permissions_check", "object", 'questions_permissions_handler');
 	elgg_register_plugin_hook_handler("widget_url", "widget_manager", 'questions_widget_url_handler');
 	elgg_register_plugin_hook_handler("cron", "daily", 'questions_daily_cron_handler');
-	
+
 	// events
 	elgg_register_event_handler("leave", "group", "questions_leave_group_handler");
 	elgg_register_event_handler("delete", "member_of_site", "questions_leave_site_handler");
@@ -73,6 +73,7 @@ function questions_init() {
 	elgg_register_action("questions/group_settings", dirname(__FILE__) . "/actions/group_settings.php");
 
 	// admin actions
+	elgg_register_action("questions/settings/save", dirname(__FILE__) . "/actions/admin/settings_save.php", "admin");
 	elgg_register_action("questions/admin/workflow_phase/add", dirname(__FILE__) . "/actions/admin/workflow_phase/add.php" , "admin");
 	elgg_register_action("questions/admin/workflow_phase/delete", dirname(__FILE__) . "/actions/admin/workflow_phase/delete.php" , "admin");
 	elgg_register_action("questions/admin/workflow_phase/reorder", dirname(__FILE__) . "/actions/admin/workflow_phase/reorder.php" , "admin");
@@ -98,10 +99,6 @@ function questions_init() {
 	elgg_register_action('object/intanswer/edit', "$actions_base/save.php");
 	elgg_register_action('intanswers/delete', "$actions_base/delete.php");
 	
-	// Register granular notification for this type
-	//register_notification_object("object", "question", elgg_echo("questions:question:notification:subject"));
-	//register_notification_object("object", "answer", elgg_echo("questions:answer:notification:subject"));
-
 	elgg_register_plugin_hook_handler('unit_test', 'system', 'questions_test');
 	
 }

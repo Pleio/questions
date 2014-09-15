@@ -505,4 +505,3 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 		}
 	}
 }
-

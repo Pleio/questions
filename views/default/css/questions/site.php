@@ -42,8 +42,10 @@
 
 span.question-workflow-status {
 	color: green;
-	font-size: 18px;
+	font-weight: normal;
+	font-size: 2em;
 	padding-right: 5px;
+	vertical-align: sub;
 }
 
 span.question-workflow-status.check {
@@ -54,39 +56,36 @@ span.question-workflow-status.late {
 	color:red;
 }
 
-div.question-workflow-overview {
-	
-}
-
-div.question-workflow-overview.full {
-	border-bottom:1px solid #cccccc;
-	padding-bottom:10px;
-	margin-bottom:10px;
-}
-
-div.question-workflow-overview.right {
+div.question-workflow-switch {
 	float:right;
 }
 
-div.question-workflow-overview.manager {
+div.question-workflow-overview-full {
+	border-bottom:1px solid #cccccc;
+	height:20px;
+	padding-bottom:10px;
+}
+
+div.question-workflow-overview-full .overview-state {
 	float:left;
-	width: 90px;	
+	padding-right:40px;
+}
+
+div.question-workflow-overview-full .overview-element {
+	float:left;
+	padding-right:60px;
+}
+
+div.question-workflow-overview-right {
+	float:right;
+}
+
+div.question-workflow-overview-right .overview-element {
+	float:left;
+	width: 100px;	
 	padding-left: 10px;
 	padding-right: 10px;		
 }
 
-div.question-workflow-overview.phase {
-	float:left;
-	width: 100px;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-div.question-workflow-overview.timespan {
-	float:left;
-	width: 90px;
-	padding-left: 10px;
-	padding-right: 10px;
-}
 
 /* End of Questions plugin */

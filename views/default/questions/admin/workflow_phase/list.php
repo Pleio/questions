@@ -23,8 +23,8 @@ if(empty($list)){
   
 ?>
 <div class="elgg-module elgg-module-inline">
-  <?php echo elgg_view("output/url", array("text" => elgg_echo("add"), "href" => $vars["url"] . "questions/admin/forms/phase_field", "class" => "elgg-button elgg-button-action questions-popup"));?>
   <div class="elgg-body" id="questions-workflow-phases-ordering">
     <?php echo $list; ?>
   </div>
+  <?php echo elgg_view("output/url", array("text" => elgg_echo("add"), "href" => $vars["url"] . "questions/admin/forms/phase_field", "class" => "elgg-button elgg-button-action questions-popup"));?>  
 </div>

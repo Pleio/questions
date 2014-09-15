@@ -25,6 +25,40 @@ $group_access_options = array(
 	ACCESS_PUBLIC => elgg_echo("PUBLIC")
 );
 
+
+function format_times($i) {
+  return str_pad($i, 2, "0", STR_PAD_LEFT);
+}
+
+$hours = range(0,23);
+$minutes = range(0,59);
+
+$hours = array_map('format_times', $hours);
+$minutes = array_map('format_times', $minutes);
+
+$days_of_the_week_options = array(
+  elgg_echo("Monday") => 1,
+  elgg_echo("Tuesday") => 2,
+  elgg_echo("Wednesday") => 3,
+  elgg_echo("Thursday") => 4,
+  elgg_echo("Friday") => 5,
+  elgg_echo("Saturday") => 6,
+  elgg_echo("Sunday") => 7
+);
+
+if ($plugin->workflow_workingtimes_days) {
+  $workflow_workingtimes_days = unserialize($plugin->workflow_workingtimes_days);
+} else {
+  $workflow_workingtimes_days = array(1,2,3,4,5);
+}
+
+if (!isset($plugin->workflow_workingtimes_begin_hour)) {
+  $plugin->workflow_workingtimes_begin_hour = 9;
+}
+if (!isset($plugin->workflow_workingtimes_end_hour)) {
+ $plugin->workflow_workingtimes_end_hour = 17; 
+}
+
 // general settings
 $general_settings = "<div>";
 $general_settings .= elgg_echo("questions:settings:general:close");
@@ -79,16 +113,27 @@ $expert_settings .= "</div>";
 
 $expert_settings .= "<div>";
 $expert_settings .= elgg_echo("questions:settings:workflow:phases");
+$expert_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:workflow:phases:description") . "</div>";
 $expert_settings .= elgg_view("questions/admin/workflow_phase/list");
 $expert_settings .= "</div>";
 
-echo elgg_view_module("inline", elgg_echo("questions:settings:workflow:title"), $expert_settings);
+$expert_settings .= "<div>";
+$expert_settings .= elgg_echo("questions:settings:workflow:workingtimes");
+$expert_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:workflow:workingtimes:description") . "</div>";
+$expert_settings .= elgg_view('input/checkboxes', array("name" => "params[workflow_workingtimes_days]", "options" => $days_of_the_week_options, "value"=>$workflow_workingtimes_days));
 
-// predefined tags settings
-$expert_settings = "<div>";
+$expert_settings .= "<div>" . elgg_echo("questions:settings:workflow:workingtimes:from") . "</div>";
+$expert_settings .= elgg_view('input/dropdown', array("name" => "params[workflow_workingtimes_begin_hour]", "options" => $hours, "value"=>$plugin->workflow_workingtimes_begin_hour));
+$expert_settings .= " : ";
+$expert_settings .= elgg_view('input/dropdown', array("name" => "params[workflow_workingtimes_begin_minute]", "options" => $minutes, "value"=>$plugin->workflow_workingtimes_begin_minute));
+
+$expert_settings .= "<div>" . elgg_echo("questions:settings:workflow:workingtimes:to") . "</div>";
+$expert_settings .= elgg_view('input/dropdown', array("name" => "params[workflow_workingtimes_end_hour]", "options" => $hours, "value"=>$plugin->workflow_workingtimes_end_hour));
+$expert_settings .= " : ";
+$expert_settings .= elgg_view('input/dropdown', array("name" => "params[workflow_workingtimes_end_minute]", "options" => $minutes, "value"=>$plugin->workflow_workingtimes_end_minute));
 $expert_settings .= "</div>";
 
-echo elgg_view_module("inline", elgg_echo("questions:settings:predefined_tags:title"), $expert_settings);
+echo elgg_view_module("inline", elgg_echo("questions:settings:workflow:title"), $expert_settings);
 
 // access options
 $access_settings = "<div>";

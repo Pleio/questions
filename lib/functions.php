@@ -296,17 +296,32 @@ function questions_close_on_marked_answer() {
  * 
  * @return int difference between timestamps (hours)
  */
-function questions_time_diff(int $beginTS, int $endTS, $workingDays = array(1,2,3,4,5), DateTime $workBeginTime, DateTime $workEndTime) {
+function questions_time_diff(int $beginTS, int $endTS) {
+
+	$settingBeginHour = elgg_get_plugin_setting("workflow_workingtimes_begin_hour", "questions");
+	$settingBeginMinute = elgg_get_plugin_setting("workflow_workingtimes_begin_minute", "questions");
+	$settingEndHour = elgg_get_plugin_setting("workflow_workingtimes_end_hour", "questions");
+	$settingEndMinute = elgg_get_plugin_setting("workflow_workingtimes_end_minute", "questions");
+	$workingDays = unserialize(elgg_get_plugin_setting("workflow_workingtimes_days", "questions"));
 
 	if ($beginTS == 0 | $endTS == 0 | $beginTS >= $endTS) {
 		return 0;
 	}
 
-	if (!$workBeginTime) {
+	if (isset($settingBeginHour) && isset($settingBeginMinute)) {
+		$workBeginTime = new DateTime($settingBeginHour . ":" . $settingBeginMinute);
+	} else {
 		$workBeginTime = new DateTime("09:00");
 	}
-	if (!$workEndTime) {
+
+	if (isset($settingEndHour) && isset($settingEndMinute)) {
+		$workEndTime = new DateTime($settingEndHour . ":". $settingEndMinute);
+	} else {
 		$workEndTime = new DateTime("17:00");
+	}
+
+	if (!is_array($workingDays)) {
+		$workingDays = array(1,2,3,4,5);
 	}
 
 	$begin = new DateTime();
