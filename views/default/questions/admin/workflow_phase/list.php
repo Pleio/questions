@@ -26,5 +26,5 @@ if(empty($list)){
   <div class="elgg-body" id="questions-workflow-phases-ordering">
     <?php echo $list; ?>
   </div>
-  <?php echo elgg_view("output/url", array("text" => elgg_echo("add"), "href" => $vars["url"] . "questions/admin/forms/phase_field", "class" => "elgg-button elgg-button-action questions-popup"));?>  
+  <br /><?php echo elgg_view("output/url", array("text" => elgg_echo("add"), "href" => $vars["url"] . "questions/admin/forms/phase_field", "class" => "elgg-button elgg-button-action questions-popup"));?></div>
 </div>
