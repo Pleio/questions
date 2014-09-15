@@ -11,7 +11,7 @@ $guid = get_input("guid");
 if(!empty($guid)){
   $entity = get_entity($guid);
   
-  if($entity instanceof QuestionsWorkflowPhase){
+  if($entity instanceof QuestionsWorkflowPhase && $entity->canEdit()){
     if($entity->disable()){
       system_message(elgg_echo("questions:workflow:action:phases:delete:success"));
     } else {

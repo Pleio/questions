@@ -170,3 +170,21 @@ function intanswers_page_handler($segments) {
 
 	return true;
 }
+
+/**
+ * Handle the CSV export page
+ *
+ * @param array $segments
+ */
+function question_admin_page_handler($segments) {
+	if ($segments[0] == "questions") {
+		switch ($segment[1]) {
+			case "csv_export":
+				admin_gatekeeper();
+				include "$pages/admin/csv_export.php";
+				break;
+		}
+	}
+
+//	return false;
+}

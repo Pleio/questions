@@ -49,6 +49,8 @@ function questions_init() {
 	elgg_register_page_handler('answers', 'answers_page_handler');
 	elgg_register_page_handler('intanswers', 'intanswers_page_handler');
 	
+	//elgg_register_page_handler('admin', 'question_admin_page_handler');
+
 	// register group admin options
 	add_group_tool_option('questions', elgg_echo("questions:enable"), false);
 	elgg_extend_view("groups/tool_latest", "questions/group_module");
@@ -74,6 +76,7 @@ function questions_init() {
 
 	// admin actions
 	elgg_register_action("questions/settings/save", dirname(__FILE__) . "/actions/admin/settings_save.php", "admin");
+	elgg_register_action("questions/csv_export", dirname(__FILE__) . "/actions/admin/csv_export.php", "admin");
 	elgg_register_action("questions/admin/workflow_phase/add", dirname(__FILE__) . "/actions/admin/workflow_phase/add.php" , "admin");
 	elgg_register_action("questions/admin/workflow_phase/delete", dirname(__FILE__) . "/actions/admin/workflow_phase/delete.php" , "admin");
 	elgg_register_action("questions/admin/workflow_phase/reorder", dirname(__FILE__) . "/actions/admin/workflow_phase/reorder.php" , "admin");
