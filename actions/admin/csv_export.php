@@ -15,6 +15,7 @@ $fh = tmpfile();
 $headers = array();
 $headers[] = "question_title";
 $headers[] = "question_time_created";
+$headers[] = "workflow_status";
 $headers[] = "number_answers";
 $headers[] = "number_intanswers";
 $headers[] = "cycle_number";
@@ -40,6 +41,7 @@ foreach ($questions as $question) {
   
   $values[] = utf8_decode($question->title);
   $values[] = date("d-m-Y H:i:s", $question->time_created);
+  $values[] = $question->isWorkflowOpen() ? "open" : "closed";
   $values[] = count($question->getAnswers());
 
   $intAnswers = $question->getIntAnswers();
