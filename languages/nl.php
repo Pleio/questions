@@ -156,6 +156,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:workflow:phase:email:description' => 'Naar dit e-mailadres wordt een bericht verstuurd zodra de vraag in deze fase geplaatst wordt.',
   'questions:workflow:closed' => 'workflow gesloten',
   'questions:workflow:none' => 'Geen',
+  'questions:phases:no_fields' => 'Nog geen fases aangemaakt',
   'questions:settings:predefined_tags:title' => 'Voorgedefinieerde tags',
   'questions:workflow:publishedFront' => 'geplaatst op voorkant',
   'questions:workflow:overview:manager' => 'Beheerder: ',

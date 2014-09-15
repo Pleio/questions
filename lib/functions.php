@@ -620,10 +620,10 @@ function questions_get_workflow_access_collection($group_id = 0) {
 	if (!$group_id) {
 		$entity = elgg_get_site_entity();
 	} else {
-		$entity = get_entity($group_id);
-		if (!$entity instanceof ElggGroup) {
-			throw new Exception("Given entity is not a group.");
-		}
+    $entity = get_entity($group_id);
+    if (!$entity instanceof Subsite && !$entity instanceof ElggGroup) {
+            throw new Exception("Given entity is not a group or a site.");
+    }
 	}
 
 	$aclGuid = $entity->getPrivateSetting('workflow_acl');

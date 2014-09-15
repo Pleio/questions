@@ -149,6 +149,7 @@ To answer the question go here:
   'questions:workflow:phase:email' => 'E-mail notification',
   'questions:workflow:phase:email:description' => 'An e-mail is send to this address when a question is placed in this phase.',
   'questions:workflow:closed' => 'workflow closed',
+  'questions:phases:no_fields' => 'No phases created yet',
   'questions:settings:predefined_tags:title' => 'Predefined tags',
   'questions:workflow:switch:backend' => 'To backend',
   'questions:workflow:switch:frontend' => 'To frontend',  
