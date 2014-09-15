@@ -130,7 +130,7 @@ To answer the question go here:
   'questions:settings:workflow:enable:description' => 'With the workflow system questions can be answered systematically.',
   'questions:settings:workflow:phases' => 'Phases',
   'questions:settings:workflow:phases:description' => 'This setting allows you to configure the different phases of the workflow system. The minimal amount of phases is two. A new question is automatically placed in the last phase. When the question is opened in the workflow system, it automatically will be placed in the first phase.',
-  'questions:settings:workflow:workingtimes' => 'Working times',    
+  'questions:settings:workflow:workingtimes' => 'Office hours',    
   'questions:settings:workflow:workingtimes:from' => 'From',
   'questions:settings:workflow:workingtimes:to' => 'To',
   'questions:workflow:newanswers' => 'New messages',

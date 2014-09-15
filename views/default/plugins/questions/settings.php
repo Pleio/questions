@@ -60,7 +60,7 @@ if (!isset($plugin->workflow_workingtimes_end_hour)) {
 }
 
 // general settings
-$general_settings = "<div>";
+$general_settings .= "<div>";
 $general_settings .= elgg_echo("questions:settings:general:close");
 $general_settings .= elgg_view("input/dropdown", array("name" => "params[close_on_marked_answer]", "value" => $plugin->close_on_marked_answer, "options_values" => $noyes_options, "class" => "mls"));
 $general_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:general:close:description") . "</div>";
@@ -107,9 +107,11 @@ echo elgg_view_module("inline", elgg_echo("questions:settings:experts:title"), $
 // workflow settings
 $expert_settings = "<div>";
 $expert_settings .= elgg_echo("questions:settings:workflow:enable");
-$expert_settings .= elgg_view("input/dropdown", array("name" => "params[workflow_enabled]", "value" => $plugin->workflow_enabled, "options_values" => $noyes_options, "class" => "mls"));
+$expert_settings .= elgg_view("input/dropdown", array("id" => "questions-workflow-enabled", "name" => "params[workflow_enabled]", "value" => $plugin->workflow_enabled, "options_values" => $noyes_options, "class" => "mls"));
 $expert_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:workflow:enable:description") . "</div>";
 $expert_settings .= "</div>";
+
+$expert_settings .= "<div id=\"questions-workflow-settings\" style=\"display:none;\">";
 
 $expert_settings .= "<div>";
 $expert_settings .= elgg_echo("questions:settings:workflow:phases");
@@ -131,6 +133,8 @@ $expert_settings .= "<div>" . elgg_echo("questions:settings:workflow:workingtime
 $expert_settings .= elgg_view('input/dropdown', array("name" => "params[workflow_workingtimes_end_hour]", "options" => $hours, "value"=>$plugin->workflow_workingtimes_end_hour));
 $expert_settings .= " : ";
 $expert_settings .= elgg_view('input/dropdown', array("name" => "params[workflow_workingtimes_end_minute]", "options" => $minutes, "value"=>$plugin->workflow_workingtimes_end_minute));
+$expert_settings .= "</div>";
+
 $expert_settings .= "</div>";
 
 echo elgg_view_module("inline", elgg_echo("questions:settings:workflow:title"), $expert_settings);

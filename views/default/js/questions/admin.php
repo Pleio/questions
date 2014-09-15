@@ -7,6 +7,20 @@
 ?>
 //<script>
 $(document).ready(function(){
+  if ($('#questions-workflow-enabled')) {
+    if ($('#questions-workflow-enabled').val() == "yes") {
+      $("#questions-workflow-settings").show();
+    }
+  }
+
+  $('#questions-workflow-enabled').change(function() {
+    if ($(this).val() == "yes") {
+      $("#questions-workflow-settings").show();
+    } else {
+      $("#questions-workflow-settings").hide();
+    }
+  });
+
   $('#questions-workflow-phases-ordering').sortable({
       update: function(event, ui) { 
         questions_workflow_phases_reorder();            
