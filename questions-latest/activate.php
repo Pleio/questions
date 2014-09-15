@@ -22,18 +22,17 @@ if (!update_subtype("object", 'questions_workflow_phase', 'QuestionsWorkflowPhas
 
 // Migrate old "correct marks" to new marks with entity relations
 $options = array(
-  'types' => 'object',
   'subtypes' => ANSWER_OBJECT,
-  'limit' => false
+  'metadata_names' => array('correct_answer'), 
+  'limit' => 0
 );
 
-$answers = elgg_get_entities($options);
+$answers = elgg_get_entities_from_metadata($options);
 foreach ($answers as $answer) {
-  if($answer->correct_answer) {
-    $question = $answer->getContainerEntity();
-    unset($answer->correct_answer);
-    $answer->save();
+  $question = $answer->getContainerEntity();
 
-    add_entity_relationship($question->guid, "correctAnswer", $answer->guid);
-  }
+  unset($answer->correct_answer);
+  $answer->save();
+
+  add_entity_relationship($question->guid, "correctAnswer", $answer->guid);
 }
