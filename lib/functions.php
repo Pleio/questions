@@ -296,7 +296,7 @@ function questions_close_on_marked_answer() {
  * 
  * @return int difference between timestamps (hours)
  */
-function questions_time_diff(int $beginTS, int $endTS) {
+function questions_time_diff(integer $beginTS, integer $endTS) {
 
 	$settingBeginHour = elgg_get_plugin_setting("workflow_workingtimes_begin_hour", "questions");
 	$settingBeginMinute = elgg_get_plugin_setting("workflow_workingtimes_begin_minute", "questions");
