@@ -87,7 +87,7 @@ class ElggIntAnswer extends ElggObject {
    * @return bool
    */
   public function publishOnFrontend() {
-    if (is_bool($this->answerGuid)) {
+    if ($this->answerGuid == 1) {
       $answer = new ElggAnswer();
       $answer->description = $this->description;
       $answer->intanswerGuid = $this->guid;
@@ -123,4 +123,21 @@ class ElggIntAnswer extends ElggObject {
 
     return parent::save();
   }
+
+  /**
+   * Delete the entity.
+   *
+   * @return bool
+   */  
+  public function delete() {
+    if ($this->answerGuid && $this->answerGuid != 1) {
+      $answer = get_entity($this->answerGuid);
+      if ($answer instanceof ElggAnswer) {
+        $answer->delete();
+      }
+    }
+
+    return parent::delete();
+  }
+
 }
