@@ -16,4 +16,4 @@ if($guid = get_input("guid")){
 }
 
 
-echo elgg_view("forms/admin/workflow_phase", $vars);
+echo elgg_view("forms/questions/admin/workflow_phase", $vars);

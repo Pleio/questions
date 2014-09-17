@@ -9,6 +9,19 @@ access_show_hidden_entities(true);
 $phases = questions_get_phases_array();
 access_show_hidden_entities(false);
 
+
+if (get_input('unit') == "hours") {
+  $timeUnit = 3600;
+} elseif (get_input('unit') == "minutes") {
+  $timeUnit = 60;
+} else {
+  $timeUnit = 1;
+}
+
+function round_timeunit($input, $timeUnit) {
+  return number_format($input / $timeUnit, 2, ",", "");
+}
+
 // create a temp file
 $fh = tmpfile();
 
@@ -61,6 +74,7 @@ foreach ($questions as $question) {
     }
   }
   
+  // determine if to append the last row
   if (count($totalPhaseTimes) > 0) {
     $cycles[] = $totalPhaseTimes;
   }
@@ -71,7 +85,7 @@ foreach ($questions as $question) {
     $currentCycleTimes = array();
 
     foreach (array_keys($phases) as $phaseGuid) {
-      $currentCycleTimes[] = $cycle[$phaseGuid];
+      $currentCycleTimes[] = round_timeunit($cycle[$phaseGuid], $timeUnit);
     }
     
     $cycleValues = array();

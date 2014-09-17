@@ -77,7 +77,7 @@ function questions_init() {
 
 	// admin actions
 	elgg_register_action("questions/settings/save", dirname(__FILE__) . "/actions/admin/settings_save.php", "admin");
-	elgg_register_action("questions/csv_export", dirname(__FILE__) . "/actions/admin/csv_export.php", "admin");
+	elgg_register_action("questions/admin/csv_export", dirname(__FILE__) . "/actions/admin/csv_export.php", "admin");
 	elgg_register_action("questions/admin/workflow_phase/add", dirname(__FILE__) . "/actions/admin/workflow_phase/add.php" , "admin");
 	elgg_register_action("questions/admin/workflow_phase/delete", dirname(__FILE__) . "/actions/admin/workflow_phase/delete.php" , "admin");
 	elgg_register_action("questions/admin/workflow_phase/reorder", dirname(__FILE__) . "/actions/admin/workflow_phase/reorder.php" , "admin");

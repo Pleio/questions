@@ -6,14 +6,8 @@
  */
 
 $title = elgg_echo('admin:questions:csv_export');
+
 $description = '<p>' . elgg_echo('questions:workflow:csv_export:description') .'</p>';
-$params = array(
-  'text' => elgg_echo('questions:workflow:csv_export:download'),
-  'href' => 'action/questions/csv_export',
-  'class' => 'elgg-button elgg-button-submit',
-  'is_action' => true,
-  'is_trusted' => true,
-);
-$description .= '<p>' . elgg_view('output/url', $params) . '</p>';
+$description .= elgg_view_form('questions/admin/csv_export');
 
 echo elgg_view_module('inline', $title, $description, array('class' => 'elgg-form-settings'));
