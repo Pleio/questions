@@ -13,7 +13,7 @@ $full_view = elgg_extract("full_view", $vars);
 <?php if ($full_view): ?>
   <div class="question-workflow-overview-full">    
     <div class="overview-element">
-      <?php echo elgg_echo("questions:workflow:overview:manager"); ?>
+      <?php echo elgg_echo("questions:workflow:overview:manager") . ": "; ?>
       <?php 
       if ($manager = $question->getWorkflowManager()) {
         echo elgg_view("output/url", array("href" => $manager->getURL(), "text" => $manager->name));
@@ -25,12 +25,12 @@ $full_view = elgg_extract("full_view", $vars);
     </div>
 
     <div class="overview-element">
-      <?php echo elgg_echo("questions:workflow:overview:phase"); ?>
+      <?php echo elgg_echo("questions:workflow:overview:phase") . ": "; ?>
       <?php echo ($currentPhase = $question->getCurrentWorkflowPhase()) ? $currentPhase->name : elgg_echo("questions:workflow:none"); ?>
     </div>
 
     <div class="overview-element">
-      <?php echo elgg_echo("questions:workflow:overview:timespan"); ?>
+      <?php echo elgg_echo("questions:workflow:overview:timespan") . ": "; ?>
       <?php echo questions_get_friendly_timespan($question->getWorkflowLatestTotalTime()); ?>
     </div> 
 

@@ -76,6 +76,10 @@ div.question-workflow-overview-full .overview-element {
 	padding-right:60px;
 }
 
+div.question-workflow-overview-right .header {
+	font-weight:bold;
+}
+
 div.question-workflow-overview-right {
 	float:right;
 }
