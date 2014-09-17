@@ -44,7 +44,7 @@ foreach ($questions as $question) {
   $values[] = $question->isWorkflowOpen() ? "open" : "closed";
   $values[] = count($question->getAnswers());
 
-  $intAnswers = $question->getIntAnswers();
+  $intAnswers = array_reverse($question->getIntAnswers());
   $values[] = count($intAnswers);
 
   
@@ -61,7 +61,9 @@ foreach ($questions as $question) {
     }
   }
   
-  $cycles[] = $totalPhaseTimes;
+  if (count($totalPhaseTimes) > 0) {
+    $cycles[] = $totalPhaseTimes;
+  }
 
   // generate a row in csv for each cycle
   $i = 1;
