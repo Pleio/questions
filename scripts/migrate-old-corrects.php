@@ -5,9 +5,9 @@
  * @package Questions
  */
 
-/*if (php_sapi_name() !== 'cli') {
+if (php_sapi_name() !== 'cli') {
   throw new Exception('This script must be run from the CLI.');
-}*/
+}
 
 // Configure with "main site". Needed so subsite_manager can identify our instance.
 
