@@ -719,3 +719,16 @@ function questions_get_friendly_timespan($timespan) {
 		}
 	}
 }
+
+/**
+ * Check if the can comment setting is active
+ * 
+ * @return bool
+ */
+function questions_can_comment() {
+	if (get_plugin_setting('cancomment', 'questions') == "no") {
+		return false;
+	}
+
+	return true;
+}

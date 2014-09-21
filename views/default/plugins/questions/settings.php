@@ -25,6 +25,9 @@ $group_access_options = array(
 	ACCESS_PUBLIC => elgg_echo("PUBLIC")
 );
 
+if (!$plugin->cancomment) {
+  $plugin->cancomment = "yes";
+}
 
 function format_times($i) {
   return str_pad($i, 2, "0", STR_PAD_LEFT);
@@ -76,6 +79,12 @@ $general_settings .= "<div>";
 $general_settings .= elgg_echo("questions:settings:general:limit_to_groups");
 $general_settings .= elgg_view("input/dropdown", array("name" => "params[limit_to_groups]", "value" => $plugin->limit_to_groups, "options_values" => $noyes_options, "class" => "mls"));
 $general_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:settings:general:limit_to_groups:description") . "</div>";
+$general_settings .= "</div>";
+
+$general_settings .= "<div>";
+$general_settings .= elgg_echo("questions:cancomment");
+$general_settings .= elgg_view("input/dropdown", array("name" => "params[cancomment]", "value" => $plugin->cancomment, "options_values" => $noyes_options, "class" => "mls"));
+$general_settings .= "<div class='elgg-subtext'>" . elgg_echo("questions:cancomment:description") . "</div>";
 $general_settings .= "</div>";
 
 echo elgg_view_module("inline", elgg_echo("questions:settings:general:title"), $general_settings);

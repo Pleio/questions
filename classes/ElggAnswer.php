@@ -73,4 +73,13 @@ class ElggAnswer extends ElggObject {
 		return check_entity_relationship($this->getQuestion()->guid, "correctAnswer", $this->guid);
 	}
 
+  /**
+   * Check if the answer can be commented
+   *
+   * @return bool
+   */
+  public function canComment() {
+    return questions_can_comment();
+  }
+
 }

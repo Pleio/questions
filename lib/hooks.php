@@ -32,7 +32,7 @@ function questions_entity_menu_handler($hook, $type, $items, $params) {
 		$entity = elgg_extract("entity", $params);
 
 		if (!empty($entity) && (elgg_instanceof($entity, "object", "question") || elgg_instanceof($entity, "object", "answer"))) {
-			if ($entity->canAnnotate(0, "generic_comment")) {
+			if ($entity->canComment()) {
 				if (elgg_extract("full_view", $params, false) || elgg_instanceof($entity, "object", "answer")) {
 					$items[] = ElggMenuItem::factory(array(
 							"name" => "comment",

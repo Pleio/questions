@@ -93,6 +93,10 @@ class ElggQuestion extends ElggObject {
 		return true;
 	}
 
+	public function canComment() {
+		return questions_can_comment();
+	}
+
 	/**
 	 * Get the URL of the question
 	 *
