@@ -67,6 +67,9 @@ function questions_init() {
 	elgg_register_plugin_hook_handler("widget_url", "widget_manager", 'questions_widget_url_handler');
 	elgg_register_plugin_hook_handler("cron", "daily", 'questions_daily_cron_handler');
 
+	elgg_register_plugin_hook_handler("notify:annotation:message", "answer", "questions_notify_message_handler");
+	elgg_register_plugin_hook_handler("notify:annotation:subject", "answer", "questions_notify_subject_handler");
+
 	// events
 	elgg_register_event_handler("leave", "group", "questions_leave_group_handler");
 	elgg_register_event_handler("delete", "member_of_site", "questions_leave_site_handler");

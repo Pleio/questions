@@ -179,6 +179,11 @@ Klik hier om de vraag te beantwoorden:
   'questions:workflow:csv_export:seconds' => 'Seconden',  
   'questions:question:notification:subject'=> 'Er is een nieuwe vraag gemaakt',
   'questions:answer:notification:subject'=> 'Er is een nieuw antwoord gemaakt',
+  'questions:notify:newresponse:subject' => 'Een nieuwe reactie is geplaatst voor: %s',
+  'questions:notify:newresponse:message' => 'Er is een nieuwe reactie geplaatst voor %s.
+
+Om de reactie te bekijken, ga naar:
+%s',  
   'friendlytimespan:seconds' => '%s seconden',
   'friendlytimespan:seconds:singular' => '%s seconde',
   'friendlytimespan:minutes' => '%s minuten',

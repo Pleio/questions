@@ -6,6 +6,23 @@
  *
  */
 
+
+function questions_notify_subject_handler($hook, $type, $items, $params) {
+	$answer = $params['annotation'];
+	$question = $answer->getContainerEntity();
+
+	return elgg_echo("questions:notify:newresponse:subject", array($question->title));
+}
+
+
+function questions_notify_message_handler($hook, $type, $items, $params) {
+	$answer = $params['annotation'];
+	$question = $answer->getContainerEntity();
+
+	return elgg_echo("questions:notify:newresponse:message", array($question->title, $question->getURL()));
+}
+
+
 function questions_owner_block_menu_handler($hook, $type, $items, $params) {
 	$entity = $params['entity'];
 

@@ -172,6 +172,12 @@ To answer the question go here:
   'questions:workflow:csv_export:seconds' => 'Seconds',
   'questions:question:notification:subject'=> 'A new question has been placed',
   'questions:answer:notification:subject'=> 'A new answer has been given',  
+  'questions:notify:newresponse:subject' => 'A new response was given for: %s',
+  'questions:notify:newresponse:message' => 'A new response was placed for the question %s.
+
+  To view the response, go to:
+  %s
+  ',
   'friendlytimespan:seconds' => '%s seconds',
   'friendlytimespan:seconds:singular' => '%s second',
   'friendlytimespan:minutes' => '%s minutes',
