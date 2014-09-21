@@ -41,7 +41,7 @@ if ($workflow == true) {
 $content = $overview . $content;
 
 $body = elgg_view_layout('content', array(
-  'title' => $title,
+  'title' => $title_icon . $title,
   'content' => $content,
   'filter' => '',
 ));
