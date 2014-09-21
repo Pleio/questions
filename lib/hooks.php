@@ -271,11 +271,9 @@ function questions_permissions_handler($hook, $type, $returnvalue, $params) {
 	$entity = elgg_extract("entity", $params);
 	$user = elgg_extract("user", $params);
 
-	if (!empty($params) && is_array($params)) {
+	if (!empty($params) && is_array($params) && $entity && $user) {
 		if (elgg_instanceof($entity, "object", "answer") | elgg_instanceof($entity, "object", "intanswer")) {
-			$entity = elgg_extract("entity", $params);
-			$user = elgg_extract("user", $params);
-
+			
 			// reset rights inherited from container
 			if ($entity->getOwnerGUID() != $user->getGUID()) {
 				$result = false;

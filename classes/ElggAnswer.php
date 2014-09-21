@@ -74,12 +74,17 @@ class ElggAnswer extends ElggObject {
 	}
 
   /**
-   * Check if the answer can be commented
+   * Can the user comment to the question?
+   * Note: this is different then giving an "answer".
    *
    * @return bool
    */
-  public function canComment() {
-    return questions_can_comment();
+  public function canComment($user_guid = 0) {
+    if (!questions_can_comment()) {
+      return false;
+    }
+
+    return $this->canAnnotate($user_guid);
   }
 
 }

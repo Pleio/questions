@@ -19,21 +19,3 @@ if (!update_subtype("object", 'intanswer', 'ElggIntAnswer')) {
 if (!update_subtype("object", 'questions_workflow_phase', 'QuestionsWorkflowPhase')) {
   add_subtype("object", 'questions_workflow_phase', 'QuestionsWorkflowPhase');
 }
-
-// Migrate old "correct marks" to new marks with entity relations
-$options = array(
-  'types' => 'object',
-  'subtypes' => ANSWER_OBJECT,
-  'limit' => false
-);
-
-$answers = elgg_get_entities($options);
-foreach ($answers as $answer) {
-  if($answer->correct_answer) {
-    $question = $answer->getContainerEntity();
-    unset($answer->correct_answer);
-    $answer->save();
-
-    add_entity_relationship($question->guid, "correctAnswer", $answer->guid);
-  }
-}
