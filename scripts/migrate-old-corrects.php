@@ -12,11 +12,11 @@ if (php_sapi_name() !== 'cli') {
 // Configure with "main site". Needed so subsite_manager can identify our instance.
 
 // Production
-//$_SERVER["HTTP_HOST"] = "www.pleio.nl";
-//$_SERVER["HTTPS"] = true;
+$_SERVER["HTTP_HOST"] = "www.pleio.nl";
+$_SERVER["HTTPS"] = true;
 
 // Development
-$_SERVER["HTTP_HOST"] = "pleio.localhost.nl";
+//$_SERVER["HTTP_HOST"] = "pleio.localhost.nl";
 
 require_once(dirname(dirname(dirname(__FILE__))) . "/../engine/start.php");
 $ia = elgg_set_ignore_access(true);
@@ -41,7 +41,7 @@ foreach($answers as $answer) {
   if (add_entity_relationship($question->guid, "correctAnswer", $answer->guid)) {
     unset($answer->correct_answer);
     $answer->save();    
-    
+
     echo "[Answer] With GUID " . $answer->guid . " updated.\n";    
   }
 }
