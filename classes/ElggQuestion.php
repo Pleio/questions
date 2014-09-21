@@ -56,6 +56,23 @@ class ElggQuestion extends ElggObject {
 	}
 
 	/**
+	 * Get the latest internal answer of the question
+	 *
+	 * @return ElggAnswer latest answer of to the question
+	 */
+	public function getLatestIntAnswer() {
+		$settings = array(
+			'order_by' => 'time_created desc',
+			'type' => 'object',
+			'subtype' => 'intanswer',
+			'container_guid' => $this->guid,			
+			'limit' => 1
+		);
+
+		return current(elgg_get_entities($settings));
+	}	
+
+	/**
 	 * Get the internal answers of the question
 	 *
 	 * @return array|ElggIntAnswer answer of the question
