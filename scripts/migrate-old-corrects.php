@@ -21,7 +21,7 @@ $_SERVER["HTTPS"] = true;
 require_once(dirname(dirname(dirname(__FILE__))) . "/../engine/start.php");
 $ia = elgg_set_ignore_access(true);
 
-$sites = subsite_manager_get_subsites(0);
+$sites = get_data("SELECT * from {$CONFIG->dbprefix}sites_entity");
 
 foreach($sites as $site) {
   echo "[Subsite] " . $site->name . "\n";
