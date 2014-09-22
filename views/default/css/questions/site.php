@@ -41,7 +41,7 @@
 }
 
 span.question-workflow-status {
-	color: blue;
+	color: green;
 	font-weight: normal;
 	font-size: 2em;
 	padding-right: 5px;
