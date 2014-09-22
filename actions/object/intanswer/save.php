@@ -41,7 +41,7 @@ if (empty($question) || !elgg_instanceof($question, "object", "question")){
   forward(REFERER);
 }
 
-if ($question->container_guid instanceof ElggGroup) {
+if (get_entity($question->container_guid) instanceof ElggGroup) {
   $access_collection_guid = questions_get_workflow_access_collection($question->container_guid);  
   $group_guid = $question->container_guid;
 } else {
