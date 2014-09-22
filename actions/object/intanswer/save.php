@@ -13,6 +13,7 @@ $phase_guid = (int) get_input('phase_guid');
 $answer_frontend = (int) get_input('answer_frontend');
 $container_guid = (int) get_input('container_guid');
 $description = get_input('description');
+$timeworked = get_input('timeworked');
 
 $intanswer = new ElggIntAnswer($guid);
 
@@ -41,6 +42,16 @@ if (empty($question) || !elgg_instanceof($question, "object", "question")){
   forward(REFERER);
 }
 
+if ($adding && !$phase_guid) {
+  register_error(elgg_echo("questions:action:intanswer:save:nophase")); 
+  forward(REFERER);
+}
+
+if ($adding && (!$timeworked | !is_numeric($timeworked))) {
+  register_error(elgg_echo("questions:action:intanswer:save:notimeworked")); 
+  forward(REFERER);
+}
+
 if (get_entity($question->container_guid) instanceof ElggGroup) {
   $access_collection_guid = questions_get_workflow_access_collection($question->container_guid);  
   $group_guid = $question->container_guid;
@@ -58,8 +69,10 @@ $intanswer->access_id = $access_collection_guid;
 $intanswer->description = $description;
 $intanswer->container_guid = $container_guid;
 
-if ($adding && isset($phase_guid)) {
+
+if ($adding) {
   $intanswer->phase_guid = $question->getCurrentWorkflowPhase()->guid;
+  $intanswer->timeWorked = $timeworked;
   $intanswer->save();
   
   $question->changeWorkflowPhase($phase_guid);

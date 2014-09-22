@@ -27,6 +27,8 @@ $fh = tmpfile();
 
 $headers = array();
 $headers[] = "question_title";
+$headers[] = "question_url";
+$headers[] = "question_creator";
 $headers[] = "question_time_created";
 $headers[] = "workflow_status";
 $headers[] = "number_answers";
@@ -34,7 +36,8 @@ $headers[] = "number_intanswers";
 $headers[] = "cycle_number";
 
 foreach ($phases as $phase) {
-  $headers[] = $phase . " (seconds)";
+  $headers[] = $phase . " cycletime";
+  $headers[] = $phase . " worktime";
 }
 
 // headers
@@ -53,6 +56,8 @@ foreach ($questions as $question) {
   $values = array();
   
   $values[] = utf8_decode($question->title);
+  $values[] = utf8_decode($question->getURL());
+  $values[] = utf8_decode($question->getOwnerEntity()->name);
   $values[] = date("d-m-Y H:i:s", $question->time_created);
   $values[] = $question->isWorkflowOpen() ? "open" : "closed";
   $values[] = count($question->getAnswers());
@@ -62,30 +67,38 @@ foreach ($questions as $question) {
 
   
   $totalPhaseTimes = array();
+  $totalPhaseWorkTimes = array();
   $cycles = array();
+  $workCycles = array();
 
   // sum up all time realisations for the cycles
   foreach ($intAnswers as $intAnswer) {
     $totalPhaseTimes[$intAnswer->phase_guid] += $intAnswer->timeSpent;
+    $totalPhaseWorkTimes[$intAnswer->phase_guid] += $intAnswer->timeWorked;
 
     if (isset($intAnswer->workflowCloseCycle)) {
       $cycles[] = $totalPhaseTimes;
+      $workCycles[] = $totalPhaseWorkTimes;
+
       $totalPhaseTimes = array();
+      $totalPhaseWorkTimes = array();
     }
   }
   
   // determine if to append the last row
   if (count($totalPhaseTimes) > 0) {
     $cycles[] = $totalPhaseTimes;
+    $workCycles[] = $totalPhaseWorkTimes;
   }
 
   // generate a row in csv for each cycle
   $i = 1;
-  foreach ($cycles as $cycle) {
+  foreach ($cycles as $key => $cycle) {
     $currentCycleTimes = array();
 
     foreach (array_keys($phases) as $phaseGuid) {
       $currentCycleTimes[] = round_timeunit($cycle[$phaseGuid], $timeUnit);
+      $currentCycleTimes[] = round_timeunit($workCycles[$key][$phaseGuid], $timeUnit);
     }
     
     $cycleValues = array();

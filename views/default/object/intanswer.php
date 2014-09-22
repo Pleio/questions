@@ -24,8 +24,8 @@ if (isset($intanswer->email)) {
   $subtitle .= ", " . elgg_echo("questions:workflow:email:notification:sent");
 }
 
-if (isset($intanswer->timeSpent)) {
-  $subtitle .= ", " . questions_get_friendly_timespan($intanswer->timeSpent);
+if (isset($intanswer->timeWorked)) {
+  $subtitle .= ", " . questions_get_friendly_timespan($intanswer->timeWorked);
 }
 
 if (isset($intanswer->answerGuid)) {

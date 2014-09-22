@@ -7,6 +7,24 @@
 
 $intanswer = $vars['entity'];
 $phases = questions_get_phases_array();
+$worktimes = array(
+  0 => '----',
+  6*60 => elgg_echo('friendlytimespan:minutes', array(6)),
+  12*60 => elgg_echo('friendlytimespan:minutes', array(12)),
+  18*60 => elgg_echo('friendlytimespan:minutes', array(18)),
+  24*60 => elgg_echo('friendlytimespan:minutes', array(24)),
+  30*60 => elgg_echo('friendlytimespan:minutes', array(30)),
+  36*60 => elgg_echo('friendlytimespan:minutes', array(36)),
+  42*60 => elgg_echo('friendlytimespan:minutes', array(42)),
+  48*60 => elgg_echo('friendlytimespan:minutes', array(48)),
+  54*60 => elgg_echo('friendlytimespan:minutes', array(54)),
+  60*60 => elgg_echo('friendlytimespan:minutes', array(60)),
+  90*60 => elgg_echo('friendlytimespan:hours', array("1,5")),
+  120*60 => elgg_echo('friendlytimespan:hours', array("2")),
+  150*60 => elgg_echo('friendlytimespan:hours', array("2,5")),
+  180*60 => elgg_echo('friendlytimespan:hours', array("3"))
+);
+
 
 $description = array(
   'name' => 'description',
@@ -17,6 +35,15 @@ $description = array(
 echo elgg_view('input/longtext', $description);
 
 if (!isset($intanswer->guid)) {
+  $timeworked = array(
+    'name' => 'timeworked',
+    'id' => 'timeworked',
+    'options_values' => $worktimes
+  );
+
+  echo elgg_echo('questions:workflow:timeworked');
+  echo elgg_view('input/dropdown', $timeworked);
+
   $phase = array(
     'name' => 'phase_guid',
     'id' => 'answer_phase',
