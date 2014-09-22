@@ -145,18 +145,21 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 	return $result;
 }
 
-
 /**
  * Build a wall to block non-experts. Forward non-experts off the page.
  *
  * @return bool true if the user is an expert, false otherwise
  */
-function questions_expert_gatekeeper(ElggEntity $container = null) {
-	if ($container == null) {
+function questions_expert_gatekeeper($container_guid) {
+	if (!$container_guid) {
 		$container = elgg_get_site_entity();
+	} else {
+		$container = get_entity($container_guid);
 	}
 
-	if (!questions_is_expert($container, elgg_get_logged_in_user_entity())) {
+	$user = elgg_get_logged_in_user_entity();
+
+	if (!check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $container->guid)) {
 		register_error(elgg_echo('questions:workflow:noaccess'));
 		forward();
 	}
