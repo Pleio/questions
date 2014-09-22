@@ -37,7 +37,7 @@ echo elgg_view('input/longtext', $description);
 if (!isset($intanswer->guid)) {
   $timeworked = array(
     'name' => 'timeworked',
-    'id' => 'timeworked',
+    'id' => 'answer_timeworked',
     'options_values' => $worktimes
   );
 

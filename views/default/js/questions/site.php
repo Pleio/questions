@@ -22,6 +22,11 @@ elgg.questions.init = function() {
 	});
 
 	$(".elgg-form-object-intanswer-add").submit(function() {
+		if ($("#answer_timeworked").val() == 0) {
+			alert(elgg.echo("questions:action:intanswer:save:notimeworked"));
+			return false;
+		}
+
 		if ($("#answer_phase").val() == currentPhase) {
 			if (!confirm(elgg.echo("questions:workflow:phase:nochange:confirm"))) {
 				return false;
