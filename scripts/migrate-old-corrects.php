@@ -5,6 +5,8 @@
  * @package Questions
  */
 
+set_time_limit(0);
+
 if (php_sapi_name() !== 'cli') {
   throw new Exception('This script must be run from the CLI.');
 }
