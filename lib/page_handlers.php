@@ -62,12 +62,12 @@ function questions_page_handler($segments) {
 					include "$pages/owner.php";
 					break;
 				case "workflow":
-					if (!questions_workflow_enabled($container)) {
+					if (!questions_workflow_enabled()) {
 						register_error(elgg_echo('questions:workflow:notenabled'));
 						forward(REFERER);
 					}
 
-					questions_expert_gatekeeper($segments[1]);
+					questions_expert_gatekeeper();
 					$workflow = true;
 
 					include "$pages/workflow.php";
@@ -84,24 +84,17 @@ function questions_page_handler($segments) {
 				forward(REFERER);
 			}
 
+			questions_expert_gatekeeper();
 			$workflow = true;
 			
 			switch ($segments[1]) {
 				case "view":
 					set_input('guid', $segments[2]);
 					$question = get_entity($segments[2]);
-					
-					if ($question->getContainerEntity() instanceof ElggGroup) {
-						questions_expert_gatekeeper($question->getContainerEntity()->guid);
-					} else {
-						questions_expert_gatekeeper();
-					}
-					
 					include "$pages/view.php";
 					break;
 					
 				default:
-					questions_expert_gatekeeper();
 					include "$pages/workflow.php";				
 			}
 

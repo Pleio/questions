@@ -40,6 +40,19 @@ function questions_workflow_enabled(ElggEntity $container = null) {
 }
 
 /**
+ * Check if the can comment setting is active
+ * 
+ * @return bool
+ */
+function questions_can_comment() {
+	if (get_plugin_setting('cancomment', 'questions') == "no") {
+		return false;
+	}
+
+	return true;
+}
+
+/**
  * Return a list of active phases
  *
  */
@@ -147,19 +160,12 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 
 /**
  * Build a wall to block non-experts. Forward non-experts off the page.
- *
+ * User is considered an expert when he has the expert role on the site or in a group.
+ * 
  * @return bool true if the user is an expert, false otherwise
  */
-function questions_expert_gatekeeper($container_guid) {
-	if (!$container_guid) {
-		$container = elgg_get_site_entity();
-	} else {
-		$container = get_entity($container_guid);
-	}
-
-	$user = elgg_get_logged_in_user_entity();
-
-	if (!check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $container->guid)) {
+function questions_expert_gatekeeper() {
+	if (!questions_is_expert() && !elgg_is_admin_user()) {
 		register_error(elgg_echo('questions:workflow:noaccess'));
 		forward();
 	}
@@ -613,26 +619,15 @@ function questions_backdate_annotation($annotation_id, $time_created) {
 /**
  * Retrieve the workflow access collection controlling access
  * of the workflow entities.
- * 
- * @param int $group_id the group id of the workflow or 0 for site.
  *
  * @return int $ac_id the access id
  */
-function questions_get_workflow_access_collection($group_id = 0) {
-
-	if (!$group_id) {
-		$entity = elgg_get_site_entity();
-	} else {
-    $entity = get_entity($group_id);
-    if (!$entity instanceof Subsite && !$entity instanceof ElggGroup) {
-            throw new Exception("Given entity is not a group or a site.");
-    }
-	}
-
-	$aclGuid = $entity->getPrivateSetting('workflow_acl');
+function questions_get_workflow_access_collection() {
+	$site = elgg_get_site_entity();
+	$aclGuid = $site->getPrivateSetting('workflow_acl');
 
 	if (!$aclGuid) {
-		$aclGuid = create_access_collection("Workflow " . $entity->name, $entity->guid);
+		$aclGuid = create_access_collection("Workflow " . $site->name, $entity->guid);
 		$entity->setPrivateSetting('workflow_acl', $aclGuid);
 	}
 
@@ -721,17 +716,4 @@ function questions_get_friendly_timespan($timespan) {
 			return elgg_echo("friendlytimespan:hours:singular", array($timespan));
 		}
 	}
-}
-
-/**
- * Check if the can comment setting is active
- * 
- * @return bool
- */
-function questions_can_comment() {
-	if (get_plugin_setting('cancomment', 'questions') == "no") {
-		return false;
-	}
-
-	return true;
 }

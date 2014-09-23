@@ -152,7 +152,7 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 			}
 		}
 
-		if (questions_is_expert($expertContainer) && questions_workflow_enabled($expertContainer)) {
+		if (questions_is_expert() && questions_workflow_enabled($expertContainer)) {
 			if (elgg_instanceof($page_owner, "group")) {
 				$url = "questions/group/" . $page_owner->getGUID() . "/workflow";
 			} else {
@@ -226,59 +226,77 @@ function questions_user_hover_menu_handler($hook, $type, $returnvalue, $params) 
 	return $result;
 }
 
-function questions_container_permissions_handler($hook, $type, $returnvalue, $params) {
-	$result = $returnvalue;
-	static $experts_only;
+/**
+ * Normally writing to someone else's container is not allowed. 
+ * For questions we need to make an exception as a user wants someone else to be able
+ * to comment on his question.
+ *
+ * @param string $hook the 'permission' hook
+ * @param string $type the type
+ * @param unknown_type $returnvalue default return value
+ * @param array $params supplied params
+ *
+ * @return bool
+ */
 
-	if (!$result && !empty($params) && is_array($params)) {
+function questions_container_permissions_handler($hook, $type, $returnvalue, $params) {
+
+	if (!$returnvalue && !empty($params) && is_array($params)) {
 		$question = elgg_extract("container", $params);
 		$user = elgg_extract("user", $params);
 		$subtype = elgg_extract("subtype", $params);
 
-		if (($subtype == "answer") && !empty($user) && elgg_instanceof($question, "object", "question")) {
-			// check expert setting
-			if (!isset($experts_only)) {
-				$experts_only = false;
-
-				$setting = elgg_get_plugin_setting("experts_answer", "questions");
-				if ($setting == "yes") {
-					$experts_only = true;
-				}
-			}
-
-			// get the container of the question
+		if (!empty($user) && elgg_instanceof($question, "object", "question")) {
 			$container = $question->getContainerEntity();
+			$experts_only = elgg_get_plugin_setting("experts_answer", "questions");
 
-			if (!$experts_only) {
-				if (elgg_instanceof($container, "user")) {
-					$result = true;
-				} elseif (elgg_instanceof($container, "group")) {
-					// if the user can ask a question in the group, he should be able to answer one too
-					$result = $container->canWriteToContainer($user->getGUID(), "object", "question");
-				}
-			} else {
-				$result = questions_is_expert($container, $user);
+			if (!in_array($subtype, array('answer','intanswer'))) {
+				return false;
 			}
+
+			if ($experts_only) {
+				return question_is_expert($container, $user);
+			}
+
+			// if the container of the question is a group, check the membership
+			if (elgg_instanceof($container, "group")) {
+				return $container->canWriteToContainer($user->getGUID(), "object", "question");
+			} 
+
+			if (elgg_instanceof($container, "user")) {
+				return true;
+			}
+
 		}
 	}
 
-	return $result;
+	// preserve ELGG's decision
+	return $returnvalue;
+
 }
 
-function questions_permissions_handler($hook, $type, $returnvalue, $params) {
-	$result = $returnvalue;
 
+/**
+ * In some cases we want to block writing to a question, or we want to 
+ * For questions we need to make an exception as a user wants someone else to be able
+ * to comment on his question.
+ *
+ * @param string $hook the 'permission' hook
+ * @param string $type the type
+ * @param unknown_type $returnvalue default return value
+ * @param array $params supplied params
+ *
+ * @return bool
+ */
+
+function questions_permissions_handler($hook, $type, $returnvalue, $params) {
 	$entity = elgg_extract("entity", $params);
 	$user = elgg_extract("user", $params);
 
-	if (!empty($params) && is_array($params) && $entity && $user) {
-		if (elgg_instanceof($entity, "object", "answer") | elgg_instanceof($entity, "object", "intanswer")) {
-			
-			// reset rights inherited from container
-			if ($entity->getOwnerGUID() != $user->getGUID()) {
-				$result = false;
-			}			
-		} elseif (elgg_instanceof($entity, "object", "question")) {
+	if (!empty($user) && !empty($params) && is_array($params)) {
+		$type = $entity->getSubtype();
+
+		if ($type == "question") {
 			// disable access to owner for closed questions
 			if (elgg_instanceof($entity, "object", "question")) {
 				if ($entity->getStatus() == "closed" && $user->getGUID()==$entity->getOwnerGUID()) {
@@ -288,8 +306,19 @@ function questions_permissions_handler($hook, $type, $returnvalue, $params) {
 
 			// enable access for expert
 			$container = $entity->getContainerEntity();
-			if (questions_experts_enabled() && questions_is_expert($container, $user)) {
-				$result = true;
+			if (questions_experts_enabled()) {
+				if (questions_workflow_enabled()) {
+					$result = questions_is_expert();
+				} else {
+					$result = questions_is_expert($container, $user);
+				}
+			}
+		}
+
+		if (in_array($type, array('answer','intanswer'))) {
+			// reset rights inherited from container
+			if ($entity->getOwnerGUID() != $user->getGUID()) {
+				$result = false;
 			}			
 		}
 	}

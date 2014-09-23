@@ -12,7 +12,13 @@ if (get_input('group_guid')) {
 }
 
 // set breadcrumb
-elgg_push_breadcrumb(elgg_echo("questions:workflow"));
+elgg_push_breadcrumb(elgg_echo("questions:workflow"), "questions/workflow");
+
+$page_owner = elgg_get_page_owner_entity();
+if (elgg_instanceof($page_owner, 'group')) {
+  elgg_push_breadcrumb($page_owner->name);
+}
+
 
 // prepare options
 $dbprefix = elgg_get_config("dbprefix");

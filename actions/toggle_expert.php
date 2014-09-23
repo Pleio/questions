@@ -8,7 +8,7 @@
 
 $user_guid = (int) get_input("user_guid");
 $page_owner_guid = (int) get_input("guid");
-$access_collection_guid = questions_get_workflow_access_collection($page_owner_guid);
+$access_collection_guid = questions_get_workflow_access_collection();
 
 if (!$access_collection_guid) {
 	register_error(elgg_echo("questions:workflow:noacl"));

@@ -53,13 +53,12 @@ if ($adding && (!$timeworked | !is_numeric($timeworked))) {
 }
 
 if (get_entity($question->container_guid) instanceof ElggGroup) {
-  $access_collection_guid = questions_get_workflow_access_collection($question->container_guid);  
   $group_guid = $question->container_guid;
 } else {
   $group_guid = 0;
-  $access_collection_guid = questions_get_workflow_access_collection();
 }
 
+$access_collection_guid = questions_get_workflow_access_collection();
 if (!$access_collection_guid) {
   register_error(elgg_echo("questions:workflow:noacl"));
   forward(REFERER);
