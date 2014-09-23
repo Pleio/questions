@@ -227,7 +227,7 @@ function questions_user_hover_menu_handler($hook, $type, $returnvalue, $params) 
 }
 
 /**
- * Normally writing to someone else's container is not allowed. 
+ * Normally writing to the container of someone else is not allowed. 
  * For questions we need to make an exception as a user wants someone else to be able
  * to comment on his question.
  *
@@ -254,8 +254,8 @@ function questions_container_permissions_handler($hook, $type, $returnvalue, $pa
 				return false;
 			}
 
-			if ($experts_only) {
-				return question_is_expert($container, $user);
+			if ($experts_only == "yes") {
+				return questions_is_expert($container, $user);
 			}
 
 			// if the container of the question is a group, check the membership
