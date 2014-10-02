@@ -627,8 +627,8 @@ function questions_get_workflow_access_collection() {
 	$aclGuid = $site->getPrivateSetting('workflow_acl');
 
 	if (!$aclGuid) {
-		$aclGuid = create_access_collection("Workflow " . $site->name, $entity->guid);
-		$entity->setPrivateSetting('workflow_acl', $aclGuid);
+		$aclGuid = create_access_collection("Workflow " . $site->name, $site->guid);
+		$site->setPrivateSetting('workflow_acl', $aclGuid);
 	}
 
 	return $aclGuid;
