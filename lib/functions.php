@@ -217,8 +217,13 @@ function questions_can_mark_answer(ElggAnswer $entity, ElggUser $user = null) {
 			}
 			
 			// is the user an expert
-			if (!$result && questions_is_expert($container->getContainerEntity(), $user)) {
-				$result = true;
+			if (!$result) {
+				if (questions_workflow_enabled() && questions_is_expert()) {
+					$result = true;
+				}
+				if (!questions_workflow_enabled() && questions_is_expert($container->getContainerEntity(), $user)) {
+					$result = true;
+				}
 			}
 		}
 	}
