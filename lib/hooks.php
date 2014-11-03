@@ -294,13 +294,15 @@ function questions_permissions_handler($hook, $type, $returnvalue, $params) {
 	$user = elgg_extract("user", $params);
 
 	if (!empty($user) && !empty($params) && is_array($params)) {
-		$type = $entity->getSubtype();
 
-		if ($type == "question") {
-			// disable access to owner for closed questions
-			if (elgg_instanceof($entity, "object", "question")) {
-				if ($entity->getStatus() == "closed" && $user->getGUID()==$entity->getOwnerGUID()) {
-					$result = false;
+		if (elgg_instanceof($entity, "object", "question")) {
+
+			// user is owner
+			if ($user->getGUID() == $entity->getOwnerGUID()) {
+				if ($entity->getStatus() == "closed") {
+					return false;
+				} else {
+					return true;
 				}
 			}
 
@@ -308,22 +310,21 @@ function questions_permissions_handler($hook, $type, $returnvalue, $params) {
 			$container = $entity->getContainerEntity();
 			if (questions_experts_enabled()) {
 				if (questions_workflow_enabled()) {
-					$result = questions_is_expert();
+					return questions_is_expert();
 				} else {
-					$result = questions_is_expert($container, $user);
+					return questions_is_expert($container, $user);
 				}
 			}
 		}
 
-		if (in_array($type, array('answer','intanswer'))) {
+		if (elgg_instanceof($entity, "object", "answer") | elgg_instanceof($entity, "object", "intanswer")) {
 			// reset rights inherited from container
 			if ($entity->getOwnerGUID() != $user->getGUID()) {
-				$result = false;
-			}			
+				return false;
+			}
 		}
 	}
 
-	return $result;
 }
 
 function questions_widget_url_handler($hook, $type, $returnvalue, $params) {
