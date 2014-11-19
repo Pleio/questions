@@ -16,8 +16,6 @@ $overview = elgg_view('questions/workflow/overview', array('question'=>$question
 
 $content = elgg_view_entity($question, array('full_view' => true));
 
-$intanswers = "";
-
 // add the rest of the answers
 $options = array(
   'type' => 'object',
@@ -25,16 +23,12 @@ $options = array(
   'container_guid' => $question->guid,
   'count' => true,
   'limit' => false,
-  'order_by' => 'time_created',
-  'pagination' => false
+  'pagination' => false,
+  'order_by' => 'e.time_created'
 );
 
-$intanswers .= elgg_list_entities($options);
-
+$intanswers = elgg_list_entities($options);
 $count = elgg_get_entities($options);
-if ($marked_answer) {
-  $count++;
-}
 
 // show all internal answers
 if ($count > 0) {

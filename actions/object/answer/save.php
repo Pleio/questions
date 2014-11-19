@@ -55,6 +55,7 @@ try {
 	$answer->save();
 	
 	if ($adding) {
+		update_entity_last_action($answer->container_guid, $answer->time_created);
 		add_to_river("river/object/answer/create", "create", elgg_get_logged_in_user_guid(), $answer->guid, $answer->access_id);
 	}
 } catch (Exception $e) {

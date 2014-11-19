@@ -13,6 +13,7 @@ $content = elgg_list_entities(array(
 	'subtype' => 'question',
 	'full_view' => false,
 	'list_type_toggle' => false,
+	'order_by' => 'e.last_action desc'
 )); 
 
 if (!$content) {
