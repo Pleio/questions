@@ -89,20 +89,37 @@ class ElggIntAnswer extends ElggObject {
   public function publishOnFrontend() {
     if ($this->answerGuid == 1) {
       $answer = new ElggAnswer();
+
       $answer->description = $this->description;
       $answer->intanswerGuid = $this->guid;
       $answer->container_guid = $this->container_guid;
       $answer->access_id = $this->getQuestion()->access_id;
-      $answer->save();
+
+      $publish_user = elgg_get_plugin_setting('workflow_publishuser','questions');
+      if ($publish_user && $user = get_user_by_username($publish_user)) {
+        $answer->owner_guid = $user->guid;
+
+        // ignore access because we would maybe want to write in the name of publishuser.
+        elgg_set_ignore_access(true);
+        $answer->save();
+        elgg_set_ignore_access(false);
+      } else {
+        $answer->save();
+      }
 
       $this->answerGuid = $answer->guid;
 
     } elseif (is_int($this->answerGuid)) {
       $answer = get_entity($this->answerGuid);
 
-      if ($answer instanceof ElggAnswer) {
+      if ($answer instanceof ElggAnswer) {        
+        // ignore access because we would maybe want to overwrite entity of publishuser.
+        elgg_set_ignore_access(true);
+
         $answer->description = $this->description;
         $answer->save();
+
+        elgg_set_ignore_access(false);
       }
     }
   }

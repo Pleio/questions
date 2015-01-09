@@ -143,6 +143,8 @@ Klik hier om de vraag te beantwoorden:
   'questions:settings:workflow:workingtimes:description' => 'Hier kunt u configureren tussen welke tijden er gewerkt wordt. Het systeem houdt hier rekening mee bij het berekenen van maximale looptijden.',
   'questions:settings:workflow:workingtimes:from' => 'Van',
   'questions:settings:workflow:workingtimes:to' => 'Tot',
+  'questions:settings:workflow:publishuser' => 'Publiceer voorkant bericht onder de gebruiker',
+  'questions:settings:workflow:publishuser:description' => 'Laat leeg om te publiceren als gebruiker die de actie onderneemt',  
   'questions:workflow:action:phases:save:success' => 'De fase is opgeslagen.',
   'questions:workflow:action:phases:save:error' => 'Er is iets foutgegaan tijdens het opslaan van de fase.',
   'questions:workflow:action:phases:save:email:error' => 'Het opgegeven e-mailadres is niet geldig.',

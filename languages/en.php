@@ -138,6 +138,8 @@ To answer the question go here:
   'questions:settings:workflow:workingtimes' => 'Office hours',    
   'questions:settings:workflow:workingtimes:from' => 'From',
   'questions:settings:workflow:workingtimes:to' => 'To',
+  'questions:settings:workflow:publishuser' => 'Publish front-end message under the name of',
+  'questions:settings:workflow:publishuser:description' => 'Leave empty to publish as the user who performs the action',
   'questions:workflow:action:phases:save:success' => 'The phase was saved.',
   'questions:workflow:action:phases:save:error' => 'The phase could not be saved.',  
   'questions:workflow:action:phases:save:email:error' => 'The given e-mailadress is not valid.',
