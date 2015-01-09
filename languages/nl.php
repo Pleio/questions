@@ -125,6 +125,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:workflow:open:success' => 'Vraag is geopend in workflow',
   'questions:workflow:answer:frontend' => 'Plaats antwoord ook op de voorkant',
   'questions:workflow:answer:publish:frontend:confirm' => 'Weet u zeker dat u dit antwoord ook zichtbaar wil maken op de voorkant?',
+  'questions:workflow:answer:notpublish:frontend:confirm' => 'Weet u zeker dat u dit antwoord niet zichtbaar wil maken op de voorkant?',
   'questions:workflow:phase:nochange:confirm' => 'Weet u zeker dat u de fase van de vraag niet wilt veranderen? Het proces wordt in dit geval niet doorgezet naar de volgende afdeling.',
   'questions:workflow:email:subject' => 'Nieuwe workflow vraag: %s',
   'questions:workflow:email:body' => 'Een nieuwe vraag is toegevoegd aan het workflow systeem. Beantwoord deze vraag via: %s',  

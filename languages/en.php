@@ -124,6 +124,7 @@ To answer the question go here:
   'questions:workflow:open:success' => 'Question opened in workflow',
   'questions:workflow:answer:frontend' => 'Publish answer on the frontend',
   'questions:workflow:answer:publish:frontend:confirm' => 'Are you sure you want to publish the answer to the frontend?',
+  'questions:workflow:answer:notpublish:frontend:confirm' => 'Are you sure you do not want to publish the answer to the frontend?',
   'questions:workflow:phase:nochange:confirm' => 'Do you really not want to change the phase? In this case the question will not be forwarded to the next department.',
   'questions:workflow:email:subject' => 'New workflow question: %s',
   'questions:workflow:email:body' => 'A new message is added to the workflow. Please answer this question by visiting: %s',

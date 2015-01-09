@@ -33,8 +33,14 @@ elgg.questions.init = function() {
 			}
 		}
 
-		if ($("#answer_frontend_check").attr('checked')) {
-			if (!confirm(elgg.echo("questions:workflow:answer:publish:frontend:confirm"))) {
+		if ($("#answer_phase").val() === $("#answer_phase option:last-child").val()) {
+			if ($("#answer_frontend_check").attr('checked')) {
+				message = elgg.echo("questions:workflow:answer:publish:frontend:confirm");
+			} else {
+				message = elgg.echo("questions:workflow:answer:notpublish:frontend:confirm");
+			}
+
+			if (!confirm(message)) {
 				return false;
 			}
 		}
