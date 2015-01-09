@@ -298,8 +298,10 @@ class ElggQuestion extends ElggObject {
 			return false;
 		}
 
+		unset($this->workflowManager);
+
 		$phase = $availablePhases[$phaseGuid];
-		if ($phase->email && $this->currentPhase != $phaseGuid) {
+		if ($this->currentPhase != $phaseGuid && $phase->email) {
 			questions_send_workflow_notification($this, $phase);
 		}
 
@@ -382,7 +384,6 @@ class ElggQuestion extends ElggObject {
 		unset($this->currentPhase);
 		unset($this->currentPhaseStart);		
 		unset($this->workflowStart);
-		unset($this->workflowManager);
 
 		return true;
 	}

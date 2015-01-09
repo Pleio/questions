@@ -92,6 +92,7 @@ function questions_init() {
 	elgg_register_action("questions/delete", "$actions_base/delete.php");
 	elgg_register_action("object/question/workflow_open", "$actions_base/workflow_open.php");
 	elgg_register_action("object/question/workflow_keep_closed", "$actions_base/workflow_keep_closed.php");
+	elgg_register_action("object/question/workflow_claim", "$actions_base/workflow_claim.php");	
 
 	// answer
 	$actions_base = dirname(__FILE__) . "/actions/object/answer";

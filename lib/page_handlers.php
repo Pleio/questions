@@ -84,10 +84,20 @@ function questions_page_handler($segments) {
 				forward(REFERER);
 			}
 
+			if (!elgg_is_logged_in()) {
+				$_SESSION['last_forward_from'] = current_page_url();
+				forward('/login');
+			}
+
 			questions_expert_gatekeeper();
 			$workflow = true;
 			
 			switch ($segments[1]) {
+				case "claim":
+					set_input('guid', $segments[2]);
+					$question = get_entity($segments[2]);
+					include "$pages/claim.php";
+					break;
 				case "view":
 					set_input('guid', $segments[2]);
 					$question = get_entity($segments[2]);
