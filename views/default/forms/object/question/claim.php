@@ -13,12 +13,5 @@ echo elgg_view("output/url", array(
 	"is_action" => true,
 	"class" => "elgg-button-action elgg-button"
 ));
-echo "&nbsp;&nbsp;";
-echo elgg_view("output/url", array(
-	"href" => $question->getWorkflowURL(),
-	"text" => elgg_echo("questions:workflow:claim:no"),
-	"class" => "elgg-button-action elgg-button"
-));
-
 ?>
 

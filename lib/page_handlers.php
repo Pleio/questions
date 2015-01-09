@@ -93,11 +93,6 @@ function questions_page_handler($segments) {
 			$workflow = true;
 			
 			switch ($segments[1]) {
-				case "claim":
-					set_input('guid', $segments[2]);
-					$question = get_entity($segments[2]);
-					include "$pages/claim.php";
-					break;
 				case "view":
 					set_input('guid', $segments[2]);
 					$question = get_entity($segments[2]);
