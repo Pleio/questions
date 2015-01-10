@@ -174,7 +174,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:phases:no_fields' => 'Nog geen fases aangemaakt',
   'questions:settings:predefined_tags:title' => 'Voorgedefinieerde tags',
   'questions:workflow:publishedFront' => 'geplaatst op voorkant',
-  'questions:workflow:overview:manager' => 'Beheerder',
+  'questions:workflow:overview:manager' => 'Behandelaar',
   'questions:workflow:overview:phase' => 'Fase',
   'questions:workflow:overview:timespan' => 'Looptijd',  
   'questions:workflow:switch:backend' => 'Naar achterkant',
