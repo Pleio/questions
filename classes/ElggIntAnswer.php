@@ -108,6 +108,8 @@ class ElggIntAnswer extends ElggObject {
       }
 
       $this->answerGuid = $answer->guid;
+      
+      update_entity_last_action($answer->container_guid, $answer->time_created);
 
     } elseif (is_int($this->answerGuid)) {
       $answer = get_entity($this->answerGuid);
