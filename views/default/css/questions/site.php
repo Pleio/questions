@@ -91,5 +91,17 @@ div.question-workflow-overview-right .overview-element {
 	padding-right: 10px;		
 }
 
+div.elgg-module.collapsable .elgg-head h3:before {
+	content: "\25BA";
+	font-size: smaller;
+	margin-right: 4px;
+}
+div.elgg-module.collapsable.collapsed .elgg-head h3:before {
+	content: "\25BC";
+}
+
+div.elgg-module.collapsable .elgg-list {
+	display:none;
+}
 
 /* End of Questions plugin */

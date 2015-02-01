@@ -75,6 +75,7 @@ if ($adding) {
   $intanswer->save();
   
   $question->changeWorkflowPhase($phase_guid);
+  $question->workflow_lastaction = time();
 }
 
 try {

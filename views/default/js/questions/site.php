@@ -10,8 +10,13 @@
 elgg.provide("elgg.questions");
 
 elgg.questions.init = function() {
+
+	$(".elgg-module.collapsable").click(function() {
+		$(this).find(".elgg-list").toggle();
+		$(this).toggleClass("collapsed");
+	});
+
 	var currentPhase = $("#answer_phase").val();
-	
 	$("#answer_phase").change(function() {
 		if ($(this).val() == $("#answer_phase option:last-child").val()) {
 			$("#answer_frontend").show();

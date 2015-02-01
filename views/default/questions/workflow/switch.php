@@ -19,15 +19,16 @@ if ($to == "backend") {
 ?>
 <div class="question-workflow-switch">
   <?php
-    $button = elgg_view("input/submit", array(
-      "value" => $value
+    echo elgg_view("output/url", array(
+      "text" => $value,
+      "href" => $url,
+      "class" => "elgg-button elgg-button-submit"
     ));
-    
-    echo elgg_view("input/form", array(
-      "disable_security" => true,
-      "action" => $url,
-      "method" => "GET",
-      "body" => $button
-    ));
+    echo "&nbsp;";
+    echo elgg_view("output/url", array(
+      "text" => elgg_echo("questions:workflow:switch:overview"),
+      "href" => "questions/workflow",
+      "class" => "elgg-button elgg-button-submit"
+    ));    
   ?>
 </div>

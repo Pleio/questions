@@ -16,7 +16,31 @@ $overview = elgg_view('questions/workflow/overview', array('question'=>$question
 
 $content = elgg_view_entity($question, array('full_view' => true));
 
-// add the rest of the answers
+// show all answers
+$options = array(
+  'type' => 'object',
+  'subtype' => 'answer',
+  'container_guid' => $question->guid,
+  'count' => true,
+  'limit' => false,
+  'pagination' => false,
+  'order_by' => 'e.time_created'
+);
+
+$answers = elgg_list_entities($options);
+$count = elgg_get_entities($options);
+
+if ($count > 0) {
+  if ($count == 1) {
+    $text = elgg_echo('answer');
+  } else {
+    $text = elgg_echo('answers');
+  }
+
+  $content .= elgg_view_module('info', "{$count} {$text}", $answers, array("class" => "mtm collapsable"));
+}
+
+// show all internal answers
 $options = array(
   'type' => 'object',
   'subtype' => 'intanswer',
@@ -30,9 +54,13 @@ $options = array(
 $intanswers = elgg_list_entities($options);
 $count = elgg_get_entities($options);
 
-// show all internal answers
 if ($count > 0) {
-  $content .= elgg_view_module('info', "$count " . elgg_echo('questions:workflow:intanswers'), $intanswers, array("class" => "mtm"));
+  if ($count == 1) {
+    $text = elgg_echo('questions:workflow:intanswer');
+  } else {
+    $text = elgg_echo('questions:workflow:intanswers');
+  }
+  $content .= elgg_view_module('info', "$count " . $text, $intanswers, array("class" => "mtm"));
 }
 
 // add form to open internal question or answer form

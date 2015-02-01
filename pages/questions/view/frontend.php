@@ -48,7 +48,13 @@ if (elgg_is_active_plugin("likes")) {
 $answers = elgg_list_entities($options);
 $count = elgg_get_entities($options);
 
-$content .= elgg_view_module('info', "$count " . elgg_echo('answers'), $answers, array("class" => "mtm"));
+if ($count == 1) {
+  $text = elgg_echo('answer');
+} else {
+  $text = elgg_echo('answers');
+}
+
+$content .= elgg_view_module('info', "$count " . $text, $answers, array("class" => "mtm"));
 
 // add answer form
 if (($question->getStatus() == "open") && $question->canWriteToContainer(0, 'object', 'answer')) {

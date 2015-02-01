@@ -55,6 +55,7 @@ $question->description = $description;
 $question->tags = $tags;
 $question->access_id = $access_id;
 $question->container_guid = $container_guid;
+$question->workflow_lastaction = time();
 
 try {
 	$question->save();

@@ -14,6 +14,9 @@ if (get_input('group_guid')) {
 // set breadcrumb
 elgg_push_breadcrumb(elgg_echo("questions:workflow"), "questions/workflow");
 
+elgg_push_context("workflow");
+elgg_push_context("questions");
+
 $page_owner = elgg_get_page_owner_entity();
 if (elgg_instanceof($page_owner, 'group')) {
   elgg_push_breadcrumb($page_owner->name);
@@ -23,13 +26,20 @@ if (elgg_instanceof($page_owner, 'group')) {
 // prepare options
 $dbprefix = elgg_get_config("dbprefix");
 $correct_answer_id = add_metastring("correct_answer");
+$metastring_id = get_metastring_id('workflow_lastaction');
 
 $settings = array(
   'type' => 'object',
   'subtype' => 'question',
   'full_view' => false,
   'list_type_toggle' => false,
-  'workflow' => true
+  'workflow' => true,
+  'joins' => array(
+    "LEFT JOIN {$dbprefix}metadata md ON e.guid = md.entity_guid",
+    "LEFT JOIN {$dbprefix}metastrings ms ON md.value_id = ms.id"
+  ),
+  'where' => 'md.name_id = {$metastring_id}',
+  'order_by' => 'ABS(ms.string) DESC, e.time_created DESC'
 ); 
 
 if (get_input('group_guid')) {
