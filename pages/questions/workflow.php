@@ -45,12 +45,6 @@ if (get_input('group_guid')) {
   $settings['container_guid'] = get_input('group_guid');
 }
 
-$entities = elgg_get_entities($settings);
-
-foreach($entities as $entity) {
-  var_dump($entity->guid);
-}
-
 $content = elgg_view('questions/workflow/all');
 $content .= elgg_list_entities($settings);
 
