@@ -35,14 +35,20 @@ $settings = array(
   'list_type_toggle' => false,
   'workflow' => true,
   'joins' => array(
-    "LEFT JOIN {$dbprefix}metadata md ON e.guid = md.entity_guid",
-    "LEFT JOIN {$dbprefix}metastrings ms ON (md.value_id = ms.id AND md.name_id = {$metastring_id})"
+    "JOIN {$dbprefix}metadata md ON e.guid = md.entity_guid",
+    "JOIN {$dbprefix}metastrings ms ON md.value_id = ms.id AND md.name_id = {$metastring_id}"
   ),
-  'order_by' => 'ABS(ms.string) DESC, e.time_created DESC'
+  'order_by' => 'ABS(ms.string) DESC'
 ); 
 
 if (get_input('group_guid')) {
   $settings['container_guid'] = get_input('group_guid');
+}
+
+$entities = elgg_get_entities($settings);
+
+foreach($entities as $entity) {
+  var_dump($entity->guid);
 }
 
 $content = elgg_view('questions/workflow/all');
