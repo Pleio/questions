@@ -36,9 +36,8 @@ $settings = array(
   'workflow' => true,
   'joins' => array(
     "LEFT JOIN {$dbprefix}metadata md ON e.guid = md.entity_guid",
-    "LEFT JOIN {$dbprefix}metastrings ms ON md.value_id = ms.id"
+    "LEFT JOIN {$dbprefix}metastrings ms ON (md.value_id = ms.id AND md.name_id = {$metastring_id})"
   ),
-  'where' => 'md.name_id = {$metastring_id}',
   'order_by' => 'ABS(ms.string) DESC, e.time_created DESC'
 ); 
 
