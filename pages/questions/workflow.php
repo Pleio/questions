@@ -35,10 +35,10 @@ $settings = array(
   'list_type_toggle' => false,
   'workflow' => true,
   'joins' => array(
-    "JOIN {$dbprefix}metadata md ON e.guid = md.entity_guid",
-    "JOIN {$dbprefix}metastrings ms ON md.value_id = ms.id AND md.name_id = {$metastring_id}"
+    "left join {$dbprefix}metadata md ON e.guid = md.entity_guid AND md.name_id = {$metastring_id}",
+    "left join {$dbprefix}metastrings ms ON md.value_id = ms.id"
   ),
-  'order_by' => 'ABS(ms.string) DESC'
+  'order_by' => 'ABS(ms.string) desc, e.time_created desc'
 ); 
 
 if (get_input('group_guid')) {
