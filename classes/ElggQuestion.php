@@ -204,7 +204,7 @@ class ElggQuestion extends ElggObject {
 		}
 
 		$currentPhase = $this->getCurrentWorkflowPhase();
-		if ($currentPhase->due && (time() - $this->currentPhaseStart) > $currentPhase->due) {
+		if ($currentPhase->due && questions_time_diff($this->currentPhaseStart, time()) > $currentPhase->due) {
 			return true;
 		} else {
 			return false;
