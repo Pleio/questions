@@ -76,7 +76,7 @@ $full_view = elgg_extract("full_view", $vars);
         echo $currentPhase->name;
       } else {
         if ($question->totalAnswerTimes) {
-          echo end(array_values(questions_get_phases()))->name;
+          echo end(questions_get_phases())->name;
         } else {
           echo elgg_echo("questions:workflow:none");
         }

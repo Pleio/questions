@@ -76,15 +76,15 @@ function questions_get_phases($group_id = 0) {
 	      "full_view" => false
 	    );
 
-			$phases = elgg_get_entities_from_metadata($options);
-
-			$result = array();
-			foreach ($phases as $phase) {
-				$result[$phase->guid] = $phase;
-			}
-			
-			return $result;
+		$phases = elgg_get_entities_from_metadata($options);
 	}
+
+	$result = array();
+	foreach ($phases as $phase) {
+		$result[$phase->guid] = $phase;
+	}
+	
+	return $result;
 }
 
 function questions_get_phases_array($group_id = 0) {
