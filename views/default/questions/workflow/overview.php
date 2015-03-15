@@ -26,12 +26,28 @@ $full_view = elgg_extract("full_view", $vars);
 
     <div class="overview-element">
       <?php echo elgg_echo("questions:workflow:overview:phase") . ": "; ?>
-      <?php echo ($currentPhase = $question->getCurrentWorkflowPhase()) ? $currentPhase->name : elgg_echo("questions:workflow:none"); ?>
+      <?php 
+      if ($currentPhase = $question->getCurrentWorkflowPhase()) {
+        echo $currentPhase->name;
+      } else {
+        if ($question->totalAnswerTimes) {
+          echo end(questions_get_phases())->name;
+        } else {
+          echo elgg_echo("questions:workflow:none");
+        }
+      }
+      ?>
     </div>
 
     <div class="overview-element">
       <?php echo elgg_echo("questions:workflow:overview:timespan") . ": "; ?>
-      <?php echo questions_get_friendly_timespan($question->getWorkflowLatestTotalTime()); ?>
+      <?php 
+      if ($question->isWorkflowOpen()) {
+        echo questions_get_friendly_timespan($question->getWorkflowLatestTotalTime()); 
+      } else {
+        echo "-";
+      }
+      ?>
     </div> 
 
     <div class="overview-state">
@@ -55,11 +71,27 @@ $full_view = elgg_extract("full_view", $vars);
     </div>
 
     <div class="overview-element">
-      <?php echo ($currentPhase = $question->getCurrentWorkflowPhase()) ? $currentPhase->name : elgg_echo("questions:workflow:none"); ?>
+      <?php 
+      if ($currentPhase = $question->getCurrentWorkflowPhase()) {
+        echo $currentPhase->name;
+      } else {
+        if ($question->totalAnswerTimes) {
+          echo end(questions_get_phases())->name;
+        } else {
+          echo elgg_echo("questions:workflow:none");
+        }
+      }
+      ?>
     </div>
 
     <div class="overview-element">
-      <?php echo questions_get_friendly_timespan($question->getWorkflowLatestTotalTime()); ?>
+      <?php 
+      if ($question->isWorkflowOpen()) {
+        echo questions_get_friendly_timespan($question->getWorkflowLatestTotalTime()); 
+      } else {
+        echo "-";
+      }
+      ?>
     </div>     
   </div>
 <?php endif ?>

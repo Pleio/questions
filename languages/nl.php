@@ -178,7 +178,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:workflow:publishedFront' => 'geplaatst op voorkant',
   'questions:workflow:overview:manager' => 'Behandelaar',
   'questions:workflow:overview:phase' => 'Fase',
-  'questions:workflow:overview:timespan' => 'Looptijd',  
+  'questions:workflow:overview:timespan' => 'Totale looptijd',  
   'questions:workflow:switch:backend' => 'Naar achterkant',
   'questions:workflow:switch:frontend' => 'Naar voorkant',
   'questions:workflow:switch:overview' => 'Overzicht',
