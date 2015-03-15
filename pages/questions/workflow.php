@@ -34,6 +34,7 @@ $settings = array(
   'full_view' => false,
   'list_type_toggle' => false,
   'workflow' => true,
+  'class' => 'questions-workflow-list',
   'joins' => array(
     "left join {$dbprefix}metadata md ON e.guid = md.entity_guid AND md.name_id = {$metastring_id}",
     "left join {$dbprefix}metastrings ms ON md.value_id = ms.id"
@@ -46,7 +47,7 @@ if (get_input('group_guid')) {
 }
 
 $content = elgg_view('questions/workflow/all');
-$content .= elgg_list_entities($settings);
+$content .= "<div class=\"question-workflow-list\">" . elgg_list_entities($settings) . "</div>";
 
 if (!$content) {
   $content = elgg_echo('questions:none');

@@ -91,6 +91,14 @@ div.question-workflow-overview-right .overview-element {
 	padding-right: 10px;		
 }
 
+div.question-workflow-list .elgg-content {
+	width: 550px;
+}
+
+div.question-workflow-list .elgg-tags {
+	width: 550px;
+}
+
 div.elgg-module.collapsable .elgg-head h3:before {
 	content: "\25BA";
 	font-size: smaller;
