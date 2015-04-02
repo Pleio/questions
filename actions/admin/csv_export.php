@@ -111,11 +111,11 @@ foreach ($questions as $question) {
     $totalWorkTime = 0;
 
     foreach (array_keys($phases) as $phaseGuid) {
-      $cycleTime = round_timeunit($cycle[$phaseGuid], $timeUnit);
-      $workTime = round_timeunit($workCycles[$key][$phaseGuid], $timeUnit);
+      $cycleTime = $cycle[$phaseGuid];
+      $workTime = $workCycles[$key][$phaseGuid];
 
-      $currentCycleTimes[] = $cycleTime;
-      $currentCycleTimes[] = $workTime;
+      $currentCycleTimes[] = round_timeunit($cycleTime, $timeUnit);
+      $currentCycleTimes[] = round_timeunit($workTime, $timeUnit);
 
       $totalCycleTime += $cycleTime;
       $totalWorkTime += $workTime;
@@ -125,8 +125,8 @@ foreach ($questions as $question) {
     $cycleValues = $values;
     $cycleValues[] = $i;
     $cycleValues = array_merge($cycleValues, $currentCycleTimes);
-    $cycleValues[] = $totalCycleTime;
-    $cycleValues[] = $totalWorkTime;
+    $cycleValues[] = round_timeunit($totalCycleTime, $timeUnit);
+    $cycleValues[] = round_timeunit($totalWorkTime, $timeUnit);
 
     fwrite($fh, "\"" . implode("\";\"", $cycleValues) . "\"" . PHP_EOL);
     $i++;
