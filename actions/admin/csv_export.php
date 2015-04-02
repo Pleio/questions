@@ -28,6 +28,7 @@ $fh = tmpfile();
 $headers = array();
 $headers[] = "question_title";
 $headers[] = "question_url";
+$headers[] = "question_container";
 $headers[] = "question_creator";
 $headers[] = "question_time_created";
 $headers[] = "workflow_status";
@@ -39,6 +40,9 @@ foreach ($phases as $phase) {
   $headers[] = $phase . " cycletime";
   $headers[] = $phase . " worktime";
 }
+
+$headers[] = "total_cycletime";
+$headers[] = "total_worktime";
 
 // headers
 fwrite($fh, "\"" . implode("\";\"", $headers) . "\"" . PHP_EOL);
@@ -57,6 +61,14 @@ foreach ($questions as $question) {
   
   $values[] = utf8_decode($question->title);
   $values[] = utf8_decode($question->getURL());
+
+  $container = $question->getContainerEntity();
+  if ($container instanceof ElggGroup) {
+    $values[] = $container->name;
+  } else {
+    $values[] = "";
+  }
+
   $values[] = utf8_decode($question->getOwnerEntity()->name);
   $values[] = date("d-m-Y H:i:s", $question->time_created);
   $values[] = $question->isWorkflowOpen() ? "open" : "closed";
@@ -95,16 +107,26 @@ foreach ($questions as $question) {
   $i = 1;
   foreach ($cycles as $key => $cycle) {
     $currentCycleTimes = array();
+    $totalCycleTime = 0;
+    $totalWorkTime = 0;
 
     foreach (array_keys($phases) as $phaseGuid) {
-      $currentCycleTimes[] = round_timeunit($cycle[$phaseGuid], $timeUnit);
-      $currentCycleTimes[] = round_timeunit($workCycles[$key][$phaseGuid], $timeUnit);
+      $cycleTime = round_timeunit($cycle[$phaseGuid], $timeUnit);
+      $workTime = round_timeunit($workCycles[$key][$phaseGuid], $timeUnit);
+
+      $currentCycleTimes[] = $cycleTime;
+      $currentCycleTimes[] = $workTime;
+
+      $totalCycleTime += $cycleTime;
+      $totalWorkTime += $workTime;
     }
     
     $cycleValues = array();
     $cycleValues = $values;
     $cycleValues[] = $i;
     $cycleValues = array_merge($cycleValues, $currentCycleTimes);
+    $cycleValues[] = $totalCycleTime;
+    $cycleValues[] = $totalWorkTime;
 
     fwrite($fh, "\"" . implode("\";\"", $cycleValues) . "\"" . PHP_EOL);
     $i++;
