@@ -12,7 +12,7 @@ elgg_push_breadcrumb($title);
 $title_icon = "";
 
 // switch to go from frontend to backend
-if (questions_workflow_enabled() && questions_is_expert($page_owner)) {
+if (questions_workflow_enabled() && questions_is_expert()) {
   $overview = elgg_view('questions/overview', array('question'=>$question));
 } else {
   $overview = "";
