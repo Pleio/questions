@@ -8,8 +8,15 @@
 $guid = (int) get_input('guid');
 $question = get_entity($guid);
 
+// make sure we have access
+if (empty($question)) {
+  register_error(elgg_echo('noaccess'));
+  $_SESSION['last_forward_from'] = current_page_url();
+  forward('');
+}
+
 // make sure we have a question
-if (empty($question) || !elgg_instanceof($question, "object", "question")) {
+if (!elgg_instanceof($question, "object", "question")) {
 	register_error(elgg_echo("ClassException:ClassnameNotClass", array($guid, elgg_echo("item:object:question"))));
 	forward(REFERER);
 }
