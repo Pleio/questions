@@ -59,7 +59,7 @@ if (elgg_instanceof($page_owner, "group")) {
   $site = elgg_get_site_entity();
   $user = elgg_get_logged_in_user_entity();
   $container_where = array();
-  
+
   if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $site->getGUID())) {
     $container_where[] = "(e.container_guid NOT IN (
       SELECT ge.guid
@@ -69,7 +69,7 @@ if (elgg_instanceof($page_owner, "group")) {
       AND ge.enabled = 'yes'
     ))";
   }
-  
+
   $group_options = array(
     "type" => "group",
     "limit" => false,
@@ -77,13 +77,13 @@ if (elgg_instanceof($page_owner, "group")) {
     "relationship_guid" => $user->getGUID(),
     "callback" => "questions_row_to_guid"
   );
+
   $groups = elgg_get_entities_from_relationship($group_options);
-  if (!empty($groups)) {
+
+  if (count($groups) > 0) {
     $container_where[] = "(e.container_guid IN (" . implode(",", $groups) . "))";
   }
-  
-  $container_where = "(" . implode(" OR ", $container_where) . ")";
-  
+
   $options["wheres"][] = $container_where;
 }
 
