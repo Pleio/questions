@@ -26,7 +26,6 @@ if (elgg_instanceof($page_owner, 'group')) {
 // prepare options
 $dbprefix = elgg_get_config("dbprefix");
 $correct_answer_id = add_metastring("correct_answer");
-$metastring_id = get_metastring_id('workflow_lastaction');
 
 $settings = array(
   'type' => 'object',
@@ -35,12 +34,17 @@ $settings = array(
   'list_type_toggle' => false,
   'workflow' => true,
   'class' => 'questions-workflow-list',
-  'joins' => array(
+  'order_by' => 'e.time_created desc'
+);
+
+$metastring_id = get_metastring_id('workflow_lastaction');
+if ($metastring_id) {
+  $settings['joins'] = array(
     "left join {$dbprefix}metadata md ON e.guid = md.entity_guid AND md.name_id = {$metastring_id}",
     "left join {$dbprefix}metastrings ms ON md.value_id = ms.id"
-  ),
-  'order_by' => 'ABS(ms.string) desc, e.time_created desc'
-); 
+  );
+  $settings['order_by'] = 'ABS(ms.string) desc, e.time_created desc';
+}
 
 if (get_input('group_guid')) {
   $settings['container_guid'] = get_input('group_guid');
