@@ -51,7 +51,7 @@ fwrite($fh, "\"" . implode("\";\"", $headers) . "\"" . PHP_EOL);
 $options = array(
   'type' => 'object',
   'subtype' => QUESTION_OBJECT,
-  'limit' => false
+  'limit' => 500
 );
 
 $questions = elgg_get_entities($options);
