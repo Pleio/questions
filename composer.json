@@ -1,7 +1,14 @@
 {
     "name": "pleio/questions",
+    "description": "Adds ability for users to ask questions to each other and get answers.",
     "type": "elgg-plugin",
+    "keywords": ["elgg", "plugin", "questions"],
+    "license": "GPL-2.0",
+    "support": {
+        "source": "https://github.com/Pleio/questions",
+        "issues": "https://github.com/Pleio/questions/issues"
+    },
     "require": {
-        "composer/installers": "~1.0"
+        "composer/installers": "^1.0.8"
     }
 }
