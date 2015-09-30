@@ -39,11 +39,35 @@ $settings = array(
 
 $metastring_id = get_metastring_id('workflow_lastaction');
 if ($metastring_id) {
-  $settings['joins'] = array(
+    $settings['joins'] = array(
     "left join {$dbprefix}metadata md ON e.guid = md.entity_guid AND md.name_id = {$metastring_id}",
-    "left join {$dbprefix}metastrings ms ON md.value_id = ms.id"
-  );
-  $settings['order_by'] = 'ABS(ms.string) desc, e.time_created desc';
+    "left join {$dbprefix}metastrings ms ON md.value_id = ms.id",
+    );
+    $settings['order_by'] = 'ABS(ms.string) desc, e.time_created desc';
+}
+
+$currentPhase_id = get_metastring_id('currentPhase');
+$lastview_id = get_metastring_id('workflowLastView');
+
+if (get_input('status')) {
+    if (get_input('status') == 'open' && $currentPhase_id) {
+        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$currentPhase_id}";
+        $settings['joins'][] = "left join {$dbprefix}metastrings ms2 ON md2.value_id = ms2.id";
+
+        $settings['wheres'] = 'ms2.string IS NOT NULL';
+    } elseif (get_input('status') == 'closed_check' && $lastview_id) {
+        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$lastview_id}";
+        $settings['joins'][] = "left join {$dbprefix}metastrings ms2 ON md2.value_id = ms2.id";
+
+        $settings['wheres'] = array();
+        $settings['wheres'][] = 'ms2.string < e.last_action';
+    } elseif (get_input('status') == 'closed_no_check' && $lastview_id) {
+        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$lastview_id}";
+        $settings['joins'][] = "left join {$dbprefix}metastrings ms2 ON md2.value_id = ms2.id";
+
+        $settings['wheres'] = array();
+        $settings['wheres'][] = 'ms2.string >= e.last_action';
+    }
 }
 
 if (get_input('group_guid')) {

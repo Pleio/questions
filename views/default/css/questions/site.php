@@ -80,6 +80,10 @@ div.question-workflow-overview-right .header {
 	font-weight:bold;
 }
 
+div.question-workflow-overview-left {
+	float:left;
+}
+
 div.question-workflow-overview-right {
 	float:right;
 }
@@ -110,6 +114,35 @@ div.elgg-module.collapsable.collapsed .elgg-head h3:before {
 
 div.elgg-module.collapsable .elgg-list {
 	display:none;
+}
+
+.elgg-menu-workflow-filter .elgg-menu-parent {
+	font-weight: bold;
+}
+
+.elgg-menu-workflow-filter a {
+	color: black;
+}
+
+.elgg-menu-item-workflow-filter {
+	position: relative;
+	float: left;
+	border-bottom: 0px none;
+	display: inline-block;
+}
+
+.elgg-menu-item-workflow-filter > ul {
+	width: 180px;
+	position: absolute;
+	display: none;
+	border: 1px solid #CCC;
+	padding: 5px;
+	z-index: 1;
+	background: white;
+}
+
+.elgg-menu-item-workflow-filter:hover > ul {
+	display: block;
 }
 
 /* End of Questions plugin */

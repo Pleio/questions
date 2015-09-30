@@ -62,6 +62,7 @@ function questions_init() {
 	elgg_register_plugin_hook_handler("register", "menu:user_hover", 'questions_user_hover_menu_handler');
 	elgg_register_plugin_hook_handler("register", 'menu:entity', 'questions_entity_menu_handler');
 	elgg_register_plugin_hook_handler("register", 'menu:filter', 'questions_filter_menu_handler');
+	elgg_register_plugin_hook_handler("register", 'menu:workflow_filter', 'questions_workflow_menu_handler');
 	elgg_register_plugin_hook_handler("container_permissions_check", "object", 'questions_container_permissions_handler');
 	elgg_register_plugin_hook_handler("permissions_check", "object", 'questions_permissions_handler');
 	elgg_register_plugin_hook_handler("widget_url", "widget_manager", 'questions_widget_url_handler');

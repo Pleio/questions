@@ -185,6 +185,33 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 	return $items;
 }
 
+function questions_workflow_menu_handler($hook, $type, $returnvalue, $params) {
+	$result = $returnvalue;
+
+	$result[] = ElggMenuItem::factory(array(
+		"name" => "workflow-filter",
+		"text" => elgg_echo("questions:workflow:filter") . elgg_view_icon('caret-down')
+	));
+
+	$options = array(
+		"all",
+		"open",
+		"closed_check",
+		"closed_no_check"
+	);
+
+	foreach ($options as $option) {
+		$result[] = ElggMenuItem::factory(array(
+			"name" => "workflow_filter_" . $option,
+			"text" => elgg_echo("questions:workflow:filter:" . $option),
+			"href" => "?status=" . $option,
+			"parent_name" => "workflow-filter"
+		));
+	}
+
+	return $result;
+}
+
 function questions_user_hover_menu_handler($hook, $type, $returnvalue, $params) {
 	$result = $returnvalue;
 
