@@ -1,6 +1,6 @@
 <?php
 /**
- * English language
+ * Spanish language
  *
  * @package Questions
  */
