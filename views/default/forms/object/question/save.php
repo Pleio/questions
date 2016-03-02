@@ -91,7 +91,28 @@ if ($show_access_options) {
 }
 
 // container selection options
-if (!$editing || (questions_experts_enabled() && questions_is_expert(elgg_get_page_owner_entity()))) {
+if (!$editing || (questions_experts_enabled() && questions_is_expert())) {
+	if (!$editing) {
+		$owner = elgg_get_logged_in_user_entity();
+	} else {
+		$owner = $question->getOwnerEntity();
+	}
+
+	$container_options = true;
+	$select = "<select name='container_guid' class='elgg-input-dropdown' id='questions-container-guid'>";
+
+	// add user to the list
+	$selected = "";
+	if ($owner->getGUID() == $question->getContainerGUID()) {
+		$selected = "selected='selected'";
+	}
+
+	if (!questions_limited_to_groups()) {
+		$select .= "<option value='" . $owner->getGUID() . "' " . $selected . ">" . $owner->name . "</option>";
+	} else {
+		$select .= "<option value='' " . $selected . ">" . elgg_echo("questions:edit:question:container:select") . "</option>";
+	}
+
 	if (elgg_is_active_plugin("groups")) {
 		$group_options = array(
 			"type" => "group",
@@ -101,37 +122,12 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert(elgg_get_pa
 				"value" => "yes"
 			),
 			"joins" => array("JOIN " . elgg_get_config("dbprefix") . "groups_entity ge ON e.guid = ge.guid"),
-			"order_by" => "ge.name ASC"
+			"order_by" => "ge.name ASC",
+			"relationship" => "member",
+			"relationship_guid" => elgg_get_logged_in_user_guid()
 		);
-		
-		if (!$editing) {
-			$owner = elgg_get_logged_in_user_entity();
-			
-			$group_options["relationship"] = "member";
-			$group_options["relationship_guid"] = elgg_get_logged_in_user_guid();
-		} else {
-			$owner = $question->getOwnerEntity();
-		}
-		
-		$groups = elgg_get_entities_from_relationship($group_options);
-		if (!empty($groups)) {
-			$container_options = true;
-			
-			$select = "<select name='container_guid' class='elgg-input-dropdown' id='questions-container-guid'>";
-			
-			// add user to the list
-			$selected = "";
-			if ($owner->getGUID() == $question->getContainerGUID()) {
-				$selected = "selected='selected'";
-			}
-			
-			if (!questions_limited_to_groups()) {
-				$select .= "<option value='" . $owner->getGUID() . "' " . $selected . ">" . $owner->name . "</option>";
-			} else {
-				$select .= "<option value='' " . $selected . ">" . elgg_echo("questions:edit:question:container:select") . "</option>";
-			}
-			
-			// add groups
+
+		if ($groups = elgg_get_entities($group_options)) {
 			$select .= "<optgroup label='" . htmlspecialchars(elgg_echo("groups"), ENT_QUOTES, "UTF-8", false) . "'>";
 			foreach ($groups as $group) {
 				$selected = "";
@@ -141,23 +137,25 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert(elgg_get_pa
 				$select .= "<option value='" . $group->getGUID() . "' " . $selected . ">" . $group->name . "</option>";
 			}
 			$select .= "</optgroup>";
-			
-			$select .= "</select>";
-			
-			echo "<div>";
-			echo "<label for='questions-container-guid'>" . elgg_echo("questions:edit:question:container") . "</label><br />";
-			echo $select;
-			echo "</div>";
 		}
 	}
+
+	$select .= "</select>";
+
+	echo "<div>";
+	echo "<label for='questions-container-guid'>" . elgg_echo("questions:edit:question:container") . "</label><br />";
+	echo $select;
+	echo "</div>";
+} else {
+	echo elgg_view("input/hidden", array("name" => "container_guid", "value" => $question->container_guid));
 }
 
 // end of the form
 echo "<div class='elgg-foot'>";
-if (!$container_options) {
-	echo elgg_view("input/hidden", array("name" => "container_guid", "value" => $question->container_guid));
+
+if ($editing) {
+	echo elgg_view("input/hidden", array("name" => "guid", "value" => $question->guid));
 }
-echo elgg_view("input/hidden", array("name" => "guid", "value" => $question->guid));
 
 if ($editing && questions_can_move_to_discussions($container)) {
 	echo elgg_view("output/url", array(
