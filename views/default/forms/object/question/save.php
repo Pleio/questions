@@ -127,7 +127,7 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert())) {
 			"relationship_guid" => elgg_get_logged_in_user_guid()
 		);
 
-		if ($groups = elgg_get_entities($group_options)) {
+		if ($groups = elgg_get_entities_from_relationship($group_options)) {
 			$select .= "<optgroup label='" . htmlspecialchars(elgg_echo("groups"), ENT_QUOTES, "UTF-8", false) . "'>";
 			foreach ($groups as $group) {
 				$selected = "";
