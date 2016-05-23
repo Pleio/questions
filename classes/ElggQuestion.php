@@ -55,6 +55,17 @@ class ElggQuestion extends ElggObject {
 		return current(elgg_get_entities($settings));
 	}
 
+	public function countAnswers() {
+		$options = array(
+			"type" => "object",
+			"subtype" => "answer",
+			"container_guid" => $this->guid,
+			"count" => true
+		);
+
+		return elgg_get_entities($options);
+	}
+
 	/**
 	 * Get the latest internal answer of the question
 	 *
