@@ -56,17 +56,25 @@ if (get_input('status')) {
 
         $settings['wheres'] = 'ms2.string IS NOT NULL';
     } elseif (get_input('status') == 'closed_check' && $lastview_id) {
-        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$lastview_id}";
+        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$currentPhase_id}";
         $settings['joins'][] = "left join {$dbprefix}metastrings ms2 ON md2.value_id = ms2.id";
 
+        $settings['joins'][] = "left join {$dbprefix}metadata md3 ON e.guid = md3.entity_guid AND md3.name_id = {$lastview_id}";
+        $settings['joins'][] = "left join {$dbprefix}metastrings ms3 ON md3.value_id = ms3.id";
+
         $settings['wheres'] = array();
-        $settings['wheres'][] = 'ms2.string < e.last_action';
+        $settings['wheres'][] = 'ms2.string IS NULL';
+        $settings['wheres'][] = 'ms3.string < e.last_action';
     } elseif (get_input('status') == 'closed_no_check' && $lastview_id) {
-        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$lastview_id}";
+        $settings['joins'][] = "left join {$dbprefix}metadata md2 ON e.guid = md2.entity_guid AND md2.name_id = {$currentPhase_id}";
         $settings['joins'][] = "left join {$dbprefix}metastrings ms2 ON md2.value_id = ms2.id";
 
+        $settings['joins'][] = "left join {$dbprefix}metadata md3 ON e.guid = md3.entity_guid AND md3.name_id = {$lastview_id}";
+        $settings['joins'][] = "left join {$dbprefix}metastrings ms3 ON md3.value_id = ms3.id";
+
         $settings['wheres'] = array();
-        $settings['wheres'][] = 'ms2.string >= e.last_action';
+        $settings['wheres'][] = 'ms2.string IS NULL';
+        $settings['wheres'][] = 'ms3.string >= e.last_action';
     }
 }
 
