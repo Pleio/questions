@@ -42,7 +42,7 @@ if (!isset($intanswer->guid)) {
   );
 
   echo elgg_echo('questions:workflow:timeworked');
-  echo elgg_view('input/dropdown', $timeworked);
+  echo elgg_view('input/legacy_dropdown', $timeworked);
 
   $phase = array(
     'name' => 'phase_guid',
@@ -52,7 +52,7 @@ if (!isset($intanswer->guid)) {
   );
 
   echo elgg_echo('questions:workflow:changephaseto');
-  echo elgg_view('input/dropdown', $phase);
+  echo elgg_view('input/legacy_dropdown', $phase);
 }
 
 if ($vars['current_phase_guid'] == end(array_keys($phases))) {
@@ -61,7 +61,7 @@ if ($vars['current_phase_guid'] == end(array_keys($phases))) {
   $display = 'none';
 }
 echo '<div id="answer_frontend" style="display:' . $display . ';">';
-echo elgg_view('input/checkbox', array('id'=>'answer_frontend_check', 'name'=>'answer_frontend', 'value'=>'1'));
+echo elgg_view('input/legacy_checkbox', array('id'=>'answer_frontend_check', 'name'=>'answer_frontend', 'value'=>'1'));
 echo elgg_echo('questions:workflow:answer:frontend');
 echo '</div>';
 
