@@ -12,6 +12,10 @@ if ($limit < 1) {
 	$limit = 5;
 }
 
+if ($limit > 20) {
+	$limit = 20;
+}
+
 $options = array(
 	"type" => "object",
 	"subtype" => "question",
