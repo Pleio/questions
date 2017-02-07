@@ -6,6 +6,7 @@
  */
 
 $widget = $vars["entity"];
+$container = $widget->getOwnerEntity();
 
 $limit = (int) $widget->limit;
 if ($limit < 1) {
@@ -101,9 +102,19 @@ switch ($widget->context) {
 		break;
 }
 
-$content = elgg_list_entities($options, $getter);
+$content = "";
+
+if ($container instanceof ElggGroup && $container->canWriteToContainer(0, "object", "question")) {
+	$content .= elgg_view('output/url', array(
+		'text' => elgg_echo("questions:add"),
+		'class' => 'elgg-button elgg-button-action questions-widget-button',
+		'href' => '/questions/add/' . $widget->owner_guid
+	));
+}
+
+$content .= elgg_list_entities($options, $getter);
 if (empty($content)) {
-	$content = elgg_view("output/longtext", array("value" => elgg_echo("questions:none")));
+	$content .= elgg_echo("questions:none");
 }
 
 echo $content;

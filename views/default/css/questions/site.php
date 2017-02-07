@@ -145,4 +145,10 @@ div.elgg-module.collapsable .elgg-list {
 	display: block;
 }
 
+.questions-widget-button {
+	float: right;
+	margin-left: 4px;
+	margin-bottom: 5px;
+}
+
 /* End of Questions plugin */
