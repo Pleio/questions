@@ -6,6 +6,7 @@
  */
 $language = array(
 	'answers' => 'Answers',
+  'answers:owner' => "%s's Answers",
 	'answers:addyours' => 'Add Your Answer',
 	'item:object:answer' => "Answers",
 	'item:object:question' => "Questions",

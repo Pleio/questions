@@ -6,6 +6,12 @@
  */
 
 $page_owner = elgg_get_page_owner_entity();
+
+if (!$page_owner) {
+    register_error(elgg_echo('profile:notfound'));
+    forward('/questions/all');
+}
+
 elgg_push_breadcrumb($page_owner->name);
 elgg_register_title_button();
 $title = elgg_echo('questions:owner', array($page_owner->name));

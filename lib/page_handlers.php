@@ -140,6 +140,10 @@ function answers_page_handler($segments) {
 	$pages = dirname(dirname(__FILE__)) . "/pages/answers";
 
 	switch ($segments[0]) {
+		case "owner":
+			gatekeeper();
+			include "$pages/owner.php";
+			break;
 		case "edit":
 			gatekeeper();
 			set_input('guid', $segments[1]);
